@@ -953,3 +953,62 @@ body.nav-collapsed #nav .nav-gap { margin-left: 4px; margin-right: 4px; }
 /* SVG text is sized in user units inside a viewBox — it already scales with the
    chart, so exclude it from the normaliser. */
 svg [style*="font-size"], svg text { font-size: revert !important; }
+
+/* --- SPRITE SCALE ---------------------------------------------------------
+   Sprites are emitted with hardcoded width/height ATTRIBUTES (width="24"…),
+   which CSS tokens don't reach — so they stayed ~24px next to 14.5px text and
+   read as tiny everywhere. Re-scale them by attribute tier so they keep their
+   relative hierarchy (list < board < feature) but all grow with the viewport.
+   height:auto preserves the sprite's aspect; the pixel-art rendering is kept. */
+img.sprite[width="20"], img.sprite[width="22"],
+img.sprite[width="24"], img.sprite[width="26"] {
+  width: clamp(30px, 2.25vw, 40px) !important; height: auto !important;
+}
+img.sprite[width="28"], img.sprite[width="30"], img.sprite[width="32"] {
+  width: clamp(34px, 2.6vw, 46px) !important; height: auto !important;
+}
+img.sprite[width="38"], img.sprite[width="40"], img.sprite[width="44"] {
+  width: clamp(42px, 3.2vw, 56px) !important; height: auto !important;
+}
+/* board slots and dex cards already size themselves in CSS — leave those alone */
+.slot img.sprite, .bx-sprite img, .dex-card img.sprite { width: revert !important; height: revert !important; }
+
+/* --- RANK CHART: HTML axis labels ----------------------------------------
+   Labels live outside the SVG so they use the page type scale instead of the
+   viewBox scale factor (which differs per chart and blew them up on wide
+   screens). .rk-plot is the positioning context and matches the SVG box. */
+.rank-chart .rk-plot { position: relative; margin-top: var(--sp-1); }
+.rank-chart .rk-ylab {
+  position: absolute; left: 0; transform: translateY(-50%);
+  font-size: var(--fs-2xs); color: var(--muted); font-weight: 600;
+  font-variant-numeric: tabular-nums; pointer-events: none; line-height: 1;
+  width: 30px; text-align: right;
+}
+.rank-chart .rk-foot {
+  display: flex; justify-content: space-between;
+  font-size: var(--fs-2xs); color: var(--muted); margin-top: 2px; padding: 0 2px;
+}
+.rank-chart .rk-fine { font-size: var(--fs-2xs); margin: var(--sp-1) 0 0; }
+.rank-chart .rank-tip {
+  position: absolute; display: none; pointer-events: none; z-index: 5; min-width: 128px;
+  background: #161922; border: 1px solid #2c3040; border-radius: var(--r-sm);
+  padding: var(--sp-1) var(--sp-2); font-size: var(--fs-xs);
+  box-shadow: var(--shadow-2);
+}
+
+/* --- GAME HISTORY rows: let the sprite row breathe next to the labels ----- */
+.gh-card .gh-head { gap: var(--sp-3); }
+.gh-card .gh-head img.sprite { margin-right: 1px; }
+
+/* Some sprites are sized with an inline style rather than width/height
+   attributes (trainer chips, per-trainer rows). Same tiers, same result. */
+img.sprite[style*="width:22px"], img.sprite[style*="width:24px"], img.sprite[style*="width:26px"] {
+  width: clamp(30px, 2.25vw, 40px) !important; height: auto !important;
+}
+img.sprite[style*="width:30px"], img.sprite[style*="width:32px"] {
+  width: clamp(34px, 2.6vw, 46px) !important; height: auto !important;
+}
+img.sprite[style*="width:40px"], img.sprite[style*="width:44px"], img.sprite[style*="width:48px"] {
+  width: clamp(44px, 3.4vw, 58px) !important; height: auto !important;
+}
+img.sprite[style*="width:64px"] { width: clamp(56px, 4.4vw, 76px) !important; height: auto !important; }

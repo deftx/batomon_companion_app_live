@@ -1641,7 +1641,7 @@
       const a = ang(i), c = Math.cos(a);
       const anchor = c > 0.35 ? 'start' : c < -0.35 ? 'end' : 'middle';
       const lx = cx + (R + 10) * c, ly = cy + (R + 12) * Math.sin(a) + (Math.abs(Math.sin(a)) > 0.9 ? (Math.sin(a) < 0 ? -1 : 4) : 3);
-      return `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor}" font-size="8.5" font-weight="600" fill="${d.v == null ? '#70707a' : '#b9c2d8'}"><title>${esc(d.why)}</title>${d.k} <tspan fill="${d.v == null ? '#70707a' : '#f0c440'}">${d.v == null ? '–' : d.v}</tspan></text>`;
+      return `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor}" font-size="10" font-weight="600" fill="${d.v == null ? '#70707a' : '#b9c2d8'}"><title>${esc(d.why)}</title>${d.k} <tspan fill="${d.v == null ? '#70707a' : '#f0c440'}">${d.v == null ? '–' : d.v}</tspan></text>`;
     }).join('');
     return `<svg viewBox="0 0 ${W} ${H}" style="width:${Math.round(size * W / H)}px;height:${size}px;flex:none">
       <defs><radialGradient id="${gid}" cx="50%" cy="46%" r="62%"><stop offset="0" stop-color="#9db4ec" stop-opacity="0.5"/><stop offset="1" stop-color="#5a6fae" stop-opacity="0.12"/></radialGradient></defs>
@@ -1887,12 +1887,17 @@
     const firstDiv = Math.ceil(lo / 5) * 5;
     const divCount = Math.floor((hi - firstDiv) / 5) + 1;
     const step = Math.max(1, Math.ceil(divCount / 5)); // ≤5 labels
+    // Axis labels are rendered as HTML (not SVG <text>): the SVG stretches to fill
+    // its card, so anything inside it scales by renderedWidth/viewBoxWidth — that's
+    // what made these labels balloon on wide screens while the fixed-size radar's
+    // stayed tiny. As HTML they use the shared type scale, so every chart agrees.
+    const axis = [];
     for (let d = firstDiv, k = 0; d <= hi; d += 5, k++) {
       const yy = Y(d).toFixed(1);
-      const label = k % step === 0 ? rankShort(indexToRank(clampIdx(d))) : '';
       grid += `<line x1="${PL}" y1="${yy}" x2="${W - PR}" y2="${yy}" stroke="#20232c" stroke-width="1"/>`;
-      if (label) grid += `<text x="${PL - 5}" y="${(+yy + 3).toFixed(1)}" text-anchor="end" font-size="8.5" fill="#6b7280">${label}</text>`;
+      if (k % step === 0) axis.push({ pct: (Y(d) / H) * 100, label: rankShort(indexToRank(clampIdx(d))) });
     }
+    const axisHTML = axis.map(a => `<span class="rk-ylab" style="top:${a.pct.toFixed(2)}%">${a.label}</span>`).join('');
     const linePts = pts.map((p, i) => `${X(i).toFixed(1)},${Y(p.idx).toFixed(1)}`).join(' ');
     const area = `${X(0).toFixed(1)},${H - PB} ${linePts} ${X(pts.length - 1).toFixed(1)},${H - PB}`;
     const dots = pts.map((p, i) => {
@@ -1904,17 +1909,19 @@
       <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:2px"><h3 style="margin:0">📈 Rank progression</h3>
         <span style="font-size:10px;color:var(--muted)">last ${pts.length - 1} run${pts.length - 1 === 1 ? '' : 's'} · hover a point</span>
         <span style="margin-left:auto;font-size:12px;color:${cur.c};font-weight:700">${String(cur.tier).toUpperCase()} ${cur.div} ${cur.stars}★</span></div>
-      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
-        <defs><linearGradient id="rankgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5aa2ff" stop-opacity="0.34"/><stop offset="1" stop-color="#5aa2ff" stop-opacity="0"/></linearGradient></defs>
-        ${grid}
-        <polygon points="${area}" fill="url(#rankgrad)"/>
-        <polyline points="${linePts}" fill="none" stroke="#5aa2ff" stroke-width="2" stroke-linejoin="round"/>
-        ${dots}
-        <text x="${PL}" y="${H - 8}" font-size="8.5" fill="#6b7280">${pts.length - 1} games ago</text>
-        <text x="${W - PR}" y="${H - 8}" text-anchor="end" font-size="8.5" fill="#6b7280">last game</text>
-      </svg>
-      <div class="rank-tip" style="position:absolute;display:none;pointer-events:none;background:#161922;border:1px solid #2c3040;border-radius:8px;padding:6px 9px;font-size:11px;box-shadow:0 6px 20px rgba(0,0,0,.5);z-index:5;min-width:120px"></div>
-      <div class="note" style="margin:4px 0 0;font-size:9px">Reconstructed from your run badges (★ = badges−5) and anchored to your saved rank — an estimate of the climb, exact at the last point.</div>
+      <div class="rk-plot">
+        <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">
+          <defs><linearGradient id="rankgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5aa2ff" stop-opacity="0.34"/><stop offset="1" stop-color="#5aa2ff" stop-opacity="0"/></linearGradient></defs>
+          ${grid}
+          <polygon points="${area}" fill="url(#rankgrad)"/>
+          <polyline points="${linePts}" fill="none" stroke="#5aa2ff" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+          ${dots}
+        </svg>
+        ${axisHTML}
+      </div>
+      <div class="rk-foot"><span>${pts.length - 1} games ago</span><span>last game</span></div>
+      <div class="rank-tip"></div>
+      <div class="note rk-fine">Reconstructed from your run badges (★ = badges−5) and anchored to your saved rank — an estimate of the climb, exact at the last point.</div>
     </div>`;
   }
   function wireRankChart(root, traj) {
