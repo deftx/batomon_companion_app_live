@@ -10,7 +10,7 @@
   const DOWNLOAD_PAGE = 'https://github.com/deftx/batomon_companion_app_live';
   // ☕ support link — paste your Buy Me a Coffee URL here when the page is set up
   // (e.g. 'https://buymeacoffee.com/julian'). Empty = the button opens the Who am I tab.
-  const COFFEE_URL = '';
+  const COFFEE_URL = 'https://buymeacoffee.com/jonthegym';
   // 💬 shown on the Feedback tab so people can add/DM you directly.
   // TODO Julian: put your real Discord username here (e.g. 'julian_wf').
   const DISCORD_USERNAME = 'jonthegym';
