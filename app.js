@@ -2658,9 +2658,12 @@
   // re-sim. Empty while there's no board to fight with.
   function heroWinHTML() {
     if (!lastLiveWin || !live.board.some(Boolean)) return '';
-    const w = lastLiveWin.win, m = lastLiveWin.margin;
-    const tone = m > 20 ? { t: 'FAVORED', c: 'var(--green)' } : m > -10 ? { t: 'CLOSE', c: 'var(--gold)' } : { t: 'BEHIND', c: 'var(--red)' };
-    const col = w >= 60 ? 'var(--green)' : w >= 40 ? 'var(--gold)' : 'var(--red)';
+    // The verdict MUST come from the same number it sits next to. It used to read
+    // the closed-form margin while the % came from the Monte-Carlo sim, which could
+    // render a red "~40%" beside a green "FAVORED" on the same line.
+    const w = lastLiveWin.win;
+    const tone = w >= 60 ? { t: 'FAVORED', c: 'var(--green)' } : w >= 40 ? { t: 'CLOSE', c: 'var(--gold)' } : { t: 'BEHIND', c: 'var(--red)' };
+    const col = tone.c;
     return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 10px;padding:9px 16px;border:1px solid ${tone.c};border-radius:12px;background:linear-gradient(90deg,${col}1e,transparent)">
       <div style="font-size:30px;font-weight:800;color:${col};line-height:1;min-width:74px">~${w}%</div>
       <div><div style="font-size:14px;font-weight:800;color:${tone.c};letter-spacing:.5px">${tone.t}</div>
@@ -4197,7 +4200,6 @@
       const closedSim = simBattle(mine, enemy, day, myHP, enemyHP);
       const modelsDiverge = Math.abs((closedSim.margin || 0) - (sim.margin || 0)) > 60 && (closedSim.margin > 0) !== (sim.margin > 0);
       const fightT = Math.round(sim.duration);
-      const verdict = sim.margin > 20 ? `<b class="wr-elite">FAVORED</b>` : sim.margin > -10 ? `<b class="wr-good">CLOSE</b>` : `<b class="wr-low">BEHIND</b>`;
       // ⚔️ WIN PROBABILITY (Bob's-Buddy-style): a band, not a point. Jitters the
       // SAME tKill/tDie the verdict uses (±12% multiplicative noise, N=400), so
       // verdict and % can never disagree. Seeded from the state so re-renders
@@ -4245,6 +4247,12 @@
       // (that self-reference converges to under-correcting a persistent bias).
       lastPrediction = { day: live.day, win: rawWin, forRun: live.syncRunId || null };
       lastLiveWin = { win: winProb.win, margin: sim.margin, synced: !!foe }; // 🏆 feeds the hero band atop the cockpit
+      // The FAVORED/CLOSE/BEHIND label must be derived from the win% it is printed
+      // beside — and from the CALIBRATED one, so the words match the number exactly.
+      // (It used to come from the closed-form margin, which compares against the mean
+      // enemy while the win% now sims against the day's archetype spread; that could
+      // render a red "~40%" next to a green "FAVORED".)
+      const verdict = winProb.win >= 60 ? `<b class="wr-elite">FAVORED</b>` : winProb.win >= 40 ? `<b class="wr-good">CLOSE</b>` : `<b class="wr-low">BEHIND</b>`;
       // 🧭 RUN HEALTH (Mobalytics-style): one glance — lives buffer, today's sim
       // margin, badge pace vs champion tempo. Same sim object, no second model.
       {
@@ -4336,6 +4344,44 @@
         }[kind];
         return `<div class="note" style="margin:4px 0 6px;border-left:2px solid var(--accent);padding-left:8px;font-size:11px">🎯 <b>Counter-read:</b> this opponent is a <b>${cls}</b> — ${tip}</div>`;
       })() : ''}
+      ${(() => {
+        // 🕰 FIGHT-LENGTH LEVER — a player insight the raw numbers never state out loud:
+        // when your board SCALES (poison/shock/burn stacks that never decay, self-ramps
+        // like Bambudo/Galvanine/Prismagon), deliberately LOWERING burst to make the
+        // fight last longer can raise total damage, because the ramp compounds. So
+        // "add a shield/heal body" can beat "add a damage body" — the opposite of the
+        // usual instinct.
+        //
+        // Measured, not assumed: re-run the board's own output model at a 40% longer
+        // fight and compare against what a purely linear board would deal. The excess
+        // IS the scaling. Then gate it on whether you actually survive that longer
+        // fight — extending a fight you lose is just losing slower.
+        const T = Math.max(sim.duration, 4), TL = T * 1.4;
+        let gain = 0;
+        try {
+          const now = totalDmg(mine, T);
+          const longer = totalDmg(boardOutputs(live.board, live.day, TL), TL);
+          if (now > 0) gain = Math.round(((longer / (now * 1.4)) - 1) * 100);
+        } catch (e) { return ''; }
+        if (!isFinite(gain)) return '';
+        const survives = sim.tDie > sim.tKill;           // do we outlive the kill window?
+        const slack = Math.round(sim.tDie - sim.tKill);
+        // A board that can't break their EHP at all pushes tKill to absurd values —
+        // reporting "you die 385s early" would be noise dressed as precision.
+        const cantKill = !isFinite(sim.tKill) || sim.tKill > T * 3;
+        if (gain >= 10) {
+          const verdict = cantKill
+            ? `But at this rate <b>the kill never lands</b> — stretching the fight can't pay a ramp that isn't big enough. You need <b>more output as well as survivability</b>: add a damage piece, then lengthen.`
+            : survives
+              ? `You outlast the kill ${slack > T * 2 ? '<b>comfortably</b>' : `by <b>${slack}s</b>`}, so <b>stretching the fight is a damage upgrade</b>: a shield/heal body can be worth more than another attacker, even though it lowers your burst.`
+              : `But you die <b>${Math.abs(slack)}s before</b> the kill lands — the ramp never gets paid. <b>Survivability IS your damage right now</b>: shield/heal first, then the ramp wins it.`;
+          return `<div class="note" style="margin:4px 0 6px;border-left:2px solid var(--gold);padding-left:8px;font-size:11px">🕰 <b>Your board SCALES</b> — at a 40% longer fight it deals <b style="color:var(--gold)">+${gain}%</b> above what a flat board would. ${verdict}</div>`;
+        }
+        if (gain <= 3) {
+          return `<div class="note" style="margin:4px 0 6px;border-left:2px solid var(--accent);padding-left:8px;font-size:11px">⚡ <b>Your board is front-loaded</b> — a 40% longer fight adds only <b>+${gain}%</b> over linear, so stalling buys you almost nothing. <b>Win early</b>: raw damage and tempo beat sustain here.</div>`;
+        }
+        return '';
+      })()}
       ${calib && calib.adjust ? `<div class="note" style="font-size:10px;margin:0 0 6px;color:var(--accent)">🎯 <b>self-calibrated ${calib.adjust > 0 ? '+' : ''}${Math.round(calib.adjust)}pp</b> — across your <b>${calib.n}</b> logged battles the raw sim ran <b>${Math.abs(Math.round(calib.bias * 100))}% ${calib.bias > 0 ? 'over' : 'under'}-confident</b>, so this win% is nudged toward what actually happens on YOUR fights.</div>` : ''}
       <table class="stats" style="font-size:11.5px"><tr><th></th><th>💗 HP</th><th>🛡 EHP</th><th>Direct DPS</th><th>Heal/s</th><th>Shield/s</th><th>Burn/s</th><th>Poison/s</th><th>Shock/s</th><th>Hits/s</th><th>Σ dmg ~${Math.round(sim.duration)}s</th></tr>
         <tr><td><b>You</b></td><td><b style="color:var(--green)">${myHP.toLocaleString()}</b></td><td title="HP + (heal/s + shield/s×0.9) × time-to-die — what the enemy must actually chew through">~${myEHP.toLocaleString()}</td><td>${mine.dps.toFixed(1)}</td><td>${mine.heal.toFixed(1)}</td><td>${mine.shield.toFixed(1)}</td><td>${mine.burnApp.toFixed(2)}</td><td>${mine.poisonApp.toFixed(2)}</td><td>${mine.shockApp.toFixed(2)}</td><td>${mine.hitRate.toFixed(2)}</td><td><b style="color:var(--gold)">${myOut.toLocaleString()}</b></td></tr>
