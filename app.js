@@ -2790,8 +2790,8 @@
             ${live.history.map(h => `<div style="display:flex;align-items:center;gap:8px;font-size:11.5px;background:var(--bg2);border:1px solid ${h.won ? 'rgba(61,220,132,.35)' : 'rgba(255,77,94,.35)'};border-radius:9px;padding:5px 9px">
               <b style="color:${h.won ? 'var(--green)' : 'var(--red)'};min-width:56px">${h.won ? '✓ WIN' : '✗ LOSS'}</b>
               <span style="color:var(--muted)">Day ${h.day}</span>
-              <span style="display:flex;gap:2px">${h.board.slice(0, 6).map(b => { const m = monById[b.id]; return m ? `<img class="sprite" src="${spr(b.shiny && m.shinySprite ? m.shinySprite : m.sprite)}" width="22" height="22" title="${esc(m.name)} L${b.lvl}">` : ''; }).join('')}</span>
-              <span style="margin-left:auto;color:var(--muted)">🏅${h.after.badges} ❤${h.after.lives} <span style="color:var(--gold)">+$${h.income}</span></span>
+              <span style="display:flex;gap:2px">${(h.board || []).slice(0, 6).map(b => { const m = b && monById[b.id]; return m ? `<img class="sprite" src="${spr(b.shiny && m.shinySprite ? m.shinySprite : m.sprite)}" width="22" height="22" title="${esc(m.name)} L${b.lvl}">` : ''; }).join('')}</span>
+              <span style="margin-left:auto;color:var(--muted)">🏅${(h.after || {}).badges ?? '–'} ❤${(h.after || {}).lives ?? '–'} <span style="color:var(--gold)">+$${h.income || 0}</span></span>
             </div>`).join('')}</div></div>` : ''}
           ${loadRuns().length ? `<div class="card" style="text-align:center"><button class="ghost" id="lv-history-link" style="width:100%">🏆 Game History — ${loadRuns().length} past run${loadRuns().length > 1 ? 's' : ''} ›</button></div>` : ''}
         </div>
