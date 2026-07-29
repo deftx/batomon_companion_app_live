@@ -193,7 +193,11 @@ function handleIngest(body, ip, res) {
 // Discord uses a webhook kept SERVER-side: env DISCORD_WEBHOOK or the one-line
 // file tools/discord-webhook.txt (create a webhook in any private channel of
 // your own server: channel settings → Integrations → Webhooks → copy URL).
-const FEEDBACK_EMAIL = 'ichardjulian@gmail.com';
+// Kept OUT of the public repo: env FEEDBACK_EMAIL, or the one-line gitignored file
+// tools/feedback-email.txt. Without either, the email relay is simply skipped (the
+// Discord webhook and the in-app contact links still work).
+const EMAIL_FILE = path.join(ROOT, 'tools', 'feedback-email.txt');
+const FEEDBACK_EMAIL = process.env.FEEDBACK_EMAIL || (fs.existsSync(EMAIL_FILE) ? fs.readFileSync(EMAIL_FILE, 'utf8').trim() : '');
 const WEBHOOK_FILE = path.join(ROOT, 'tools', 'discord-webhook.txt');
 const discordWebhook = () => (process.env.DISCORD_WEBHOOK || (fs.existsSync(WEBHOOK_FILE) ? fs.readFileSync(WEBHOOK_FILE, 'utf8').trim() : ''));
 const fbLast = new Map(); // naive per-IP rate limit
@@ -209,16 +213,18 @@ async function handleFeedback(body, ip, res) {
   if (!subject || !message) { res.writeHead(400, hdr); res.end(JSON.stringify({ error: 'subject and message required' })); return; }
   fbLast.set(ip, now);
   const out = { email: 'skipped', discord: 'skipped' };
-  try {
-    const r = await fetch(`https://formsubmit.co/ajax/${FEEDBACK_EMAIL}`, {
-      method: 'POST',
-      // formsubmit rejects requests without a web origin — present as the app
-      headers: { 'content-type': 'application/json', accept: 'application/json', origin: `http://localhost:${PORT}`, referer: `http://localhost:${PORT}/` },
-      body: JSON.stringify({ _subject: `[Batomon Companion] ${subject}`, name: name || 'anonymous', contact: contact || 'not given', message, _template: 'box', _captcha: 'false' }),
-    });
-    const j = await r.json().catch(() => ({}));
-    out.email = j.success === 'true' || j.success === true ? 'sent' : 'failed: ' + (j.message || r.status);
-  } catch (e) { out.email = 'failed: ' + e.message; }
+  if (FEEDBACK_EMAIL) {
+    try {
+      const r = await fetch(`https://formsubmit.co/ajax/${FEEDBACK_EMAIL}`, {
+        method: 'POST',
+        // formsubmit rejects requests without a web origin — present as the app
+        headers: { 'content-type': 'application/json', accept: 'application/json', origin: `http://localhost:${PORT}`, referer: `http://localhost:${PORT}/` },
+        body: JSON.stringify({ _subject: `[Batomon Companion] ${subject}`, name: name || 'anonymous', contact: contact || 'not given', message, _template: 'box', _captcha: 'false' }),
+      });
+      const j = await r.json().catch(() => ({}));
+      out.email = j.success === 'true' || j.success === true ? 'sent' : 'failed: ' + (j.message || r.status);
+    } catch (e) { out.email = 'failed: ' + e.message; }
+  }
   const hook = discordWebhook();
   if (hook) {
     try {

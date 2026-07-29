@@ -29,3 +29,13 @@ scratchpad/
 # The player's live game save is read from the Godot userdata dir, never copied here —
 # but ignore it defensively in case someone drops one in the project root.
 run_save.json
+
+# Local secrets / private config — NEVER commit (public repo)
+tools/ai-key.txt
+tools/discord-webhook.txt
+tools/feedback-email.txt
+
+# Internal working docs — kept local / private repo only, not for the public release
+tools/berrymint-message.md
+tools/brain-research.md
+RELEASING.md
