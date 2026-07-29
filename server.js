@@ -12,6 +12,7 @@ const { spawn } = require('child_process');
 
 const ROOT = __dirname;
 const PORT = process.env.PORT || 8137;
+const HOST = process.env.BC_HOST || '127.0.0.1'; // loopback by default — see the listen() note at the bottom
 // live game link: the game writes its run state here in PLAIN JSON (since ~0.8.x)
 const RUN_SAVE = path.join(process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'),
   'Godot', 'app_userdata', 'Batomon Showdown', 'run_save.json');
@@ -376,7 +377,13 @@ http.createServer(async (req, res) => {
   } catch (e) {
     res.writeHead(500); res.end(String(e.message || e));
   }
-}).listen(PORT, () => console.log('Batomon Companion on http://localhost:' + PORT));
+// SECURITY: bind to loopback ONLY by default. Without an explicit host, Node
+// listens on 0.0.0.0 — which would expose this machine's endpoints (/api/refresh
+// spawns processes, /api/live-run reads the game save, /api/ai-analyze spends the
+// user's API credits) to everyone on the same network. This app is a local tool,
+// so localhost is the correct default. Opt into LAN access deliberately with
+// BC_HOST=0.0.0.0 (e.g. to view the companion from a tablet on your own network).
+}).listen(PORT, HOST, () => console.log(`Batomon Companion on http://localhost:${PORT}${HOST === '127.0.0.1' ? '' : `  (listening on ${HOST} — reachable from your network)`}`));
 
 // ---- periodic auto re-scrape ----
 // Keep the dataset fresh without anyone remembering to hit the Refresh button.
