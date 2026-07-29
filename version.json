@@ -1,7 +1,7 @@
 {
-  "version": "2.1.0",
+  "version": "2.2.0",
   "minSupported": "2.0.0",
   "releaseUrl": "https://github.com/deftx/batomon_companion_app_live/releases/latest",
   "downloadUrl": "https://github.com/deftx/batomon_companion_app_live/releases/latest/download/batomon-companion.zip",
-  "notes": "New: the fight-length read — when your board scales, it tells you that a shield/heal body can beat another attacker. Plus the real opponent-rank spread, and the FAVORED/CLOSE/BEHIND verdict now always matches the win% beside it."
+  "notes": "Easier install: double-click start.cmd, no terminal needed - it checks Node.js for you, explains what to do, and waits for the server before opening the browser. Plus fixes: backups no longer lose your rank, one bad battle-log entry can no longer blank the cockpit, and the win% verdict always matches the number beside it."
 }

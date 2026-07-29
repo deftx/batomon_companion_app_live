@@ -5,7 +5,7 @@
   // APP_VERSION is bumped at release time and compared against the PUBLIC repo's
   // version.json: older-but-supported → soft update banner; below `minSupported` →
   // hard block (the old build stops working and points at the download).
-  const APP_VERSION = '2.1.0';
+  const APP_VERSION = '2.2.0';
   const UPDATE_MANIFEST = 'https://raw.githubusercontent.com/deftx/batomon_companion_app_live/main/version.json';
   const DOWNLOAD_PAGE = 'https://github.com/deftx/batomon_companion_app_live';
   // ☕ support link. Empty = the button falls back to opening the Who am I tab.
