@@ -2108,7 +2108,26 @@
             localStorage.setItem('bc_rankmanual', JSON.stringify(manual));
           }
           const starRow = (n, interactive) => [1, 2, 3, 4, 5].map(i => `<span ${interactive ? `class="pr-star" data-s="${i}"` : ''} style="cursor:${interactive ? 'pointer' : 'default'};font-size:${interactive ? 20 : 16}px;color:${i <= n ? 'var(--gold)' : '#3a3a44'}">★</span>`).join('');
-          const oppoLine = oppo.n >= 2 ? `<div style="font-size:10.5px;color:var(--muted);margin-top:5px" title="matchmaking pairs similar ratings — sampled from synced opponents">🆚 opponents avg <b>~${Math.round(oppo.sum / oppo.n)} MMR</b> (${oppo.n} sampled)</div>` : '';
+          // 🆚 OPPONENT SPREAD — the mean alone can't tell you whether the ladder
+          // pairs you with your own rank (a Silver facing two Golds and two Bronzes
+          // averages to "Silver"). Show the actual range + how far the middle 50%
+          // sits from your own rating, which is the number that answers it.
+          const oppoLine = (() => {
+            if (oppo.n < 2) return '';
+            const avg = Math.round(oppo.sum / oppo.n);
+            let sm = []; try { sm = JSON.parse(localStorage.getItem('bc_mmrSamples') || '[]'); } catch (e) {}
+            const v = (Array.isArray(sm) ? sm : []).map(s => s && +s.m).filter(m => m > 0).sort((a, b) => a - b);
+            if (v.length < 5) return `<div style="font-size:10.5px;color:var(--muted);margin-top:5px" title="sampled from the opponents your ranked runs actually faced">🆚 opponents avg <b>~${avg} MMR</b> (${oppo.n} sampled)</div>`;
+            const q = (p) => v[Math.min(v.length - 1, Math.floor(p * (v.length - 1)))];
+            const lo = v[0], hi = v[v.length - 1], q1 = q(0.25), q3 = q(0.75);
+            const width = hi - lo, iqr = q3 - q1;
+            const verdict = iqr <= 120 ? { t: 'tightly matched', c: 'var(--green)' }
+              : iqr <= 300 ? { t: 'loosely matched', c: 'var(--gold)' }
+                : { t: 'barely rank-matched', c: 'var(--red)' };
+            return `<div style="font-size:10.5px;color:var(--muted);margin-top:5px" title="Measured from the opponents your ranked runs actually faced — not an assumption. A narrow middle 50% means the ladder pairs you with your own rating; a wide one means it doesn't.">
+              🆚 <b>${v.length}</b> real opponents · median <b>~${q(0.5)}</b> MMR · range <b>${lo}–${hi}</b> (spread ${width})
+              <div style="margin-top:2px">middle 50%: <b>${q1}–${q3}</b> → <b style="color:${verdict.c}">${verdict.t}</b></div></div>`;
+          })();
           let body;
           if (auto) {
             const rows = Object.entries(auto).filter(([k]) => k !== 'at' && k !== 'src').map(([k, v]) => `<div style="font-size:13px"><span style="color:var(--muted)">${esc(k)}</span> <b>${esc(String(v))}</b></div>`).join('');
@@ -5140,6 +5159,22 @@
       live.isRanked = !!d.is_ranked;
       const oppMmrs = (d.faced_opponent_mmrs || []).map(Number).filter(m => m > 0);
       if (oppMmrs.length) localStorage.setItem('bc_mmrEst', JSON.stringify({ n: oppMmrs.length, sum: oppMmrs.reduce((a, b) => a + b, 0) }));
+      // Keep the individual samples, not just the mean. A mean CANNOT show whether
+      // the ladder actually pairs you with your own rank — a Silver who faces two
+      // Golds and two Bronzes averages to "Silver" and looks perfectly matched.
+      // The SPREAD is the evidence, so retain it (capped, local, per run_id so a
+      // re-sync overwrites rather than double-counts).
+      if (oppMmrs.length) {
+        try {
+          const key = 'bc_mmrSamples';
+          let all = JSON.parse(localStorage.getItem(key) || '[]');
+          if (!Array.isArray(all)) all = [];
+          const rid = d.run_id || live.syncRunId || 'local';
+          all = all.filter(s => s && s.run !== rid);              // re-sync → replace this run's samples
+          oppMmrs.forEach(m => all.push({ m, run: rid, day: +d.round || live.day }));
+          localStorage.setItem(key, JSON.stringify(all.slice(-400))); // cap: plenty for a distribution
+        } catch (e) {}
+      }
       // 🎖 per-rank MMR ANCHOR: pin this run's opponent MMRs to the rank you're at so
       // the (wrong) low-tier bands self-calibrate over a few ranked runs. Keyed by
       // run_id → re-syncs OVERWRITE (never double-count); needs your manual rank set
