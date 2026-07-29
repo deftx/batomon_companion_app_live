@@ -8,8 +8,7 @@
   const APP_VERSION = '2.0.0';
   const UPDATE_MANIFEST = 'https://raw.githubusercontent.com/deftx/batomon_companion_app_live/main/version.json';
   const DOWNLOAD_PAGE = 'https://github.com/deftx/batomon_companion_app_live';
-  // ☕ support link — paste your Buy Me a Coffee URL here when the page is set up
-  // (e.g. 'https://buymeacoffee.com/julian'). Empty = the button opens the Who am I tab.
+  // ☕ support link. Empty = the button falls back to opening the Who am I tab.
   const COFFEE_URL = 'https://buymeacoffee.com/jonthegym';
   // 💬 contact shown on the Feedback tab so people can add/DM directly.
   const DISCORD_USERNAME = 'jonthegym';
@@ -4949,7 +4948,7 @@
       else if (/^(cooldown_speed|cds)$/.test(k)) f.cds += v;
       else unknown.push(k);
     }
-    if (unknown.length) console.log('[game-sync] unmapped perm_buffs keys (tell Claude):', unknown, pb);
+    if (unknown.length) console.log('[game-sync] unmapped perm_buffs keys — please report these so they can be modelled:', unknown, pb);
     return Object.values(f).some(v => v) ? f : undefined;
   }
   function applyGameSave(d) {
@@ -4994,7 +4993,7 @@
         };
       } else {
         // unknown layout — log once so the mapping can be fixed fast
-        console.log('[battle-sync] unmapped pending_battle_opponent shape (tell Claude):', JSON.stringify(pbo).slice(0, 600));
+        console.log('[battle-sync] unmapped pending_battle_opponent shape — please report this so the mapping can be fixed:', JSON.stringify(pbo).slice(0, 600));
       }
     }
     // drop any cached opponent that isn't for the CURRENT round — a captured
@@ -5161,7 +5160,7 @@
       const unknown = Object.keys(d).filter(k => !KNOWN_SAVE_KEYS.has(k));
       if (unknown.length && localStorage.getItem('bc_keylog') !== unknown.join(',')) {
         localStorage.setItem('bc_keylog', unknown.join(','));
-        console.log('[game-sync] NEW top-level save keys (tell Claude — possible rank/MMR fields):', unknown.map(k => `${k}=${JSON.stringify(d[k]).slice(0, 60)}`));
+        console.log('[game-sync] NEW top-level save keys — please report (possible rank/MMR fields):', unknown.map(k => `${k}=${JSON.stringify(d[k]).slice(0, 60)}`));
       }
       // 🎖 MMR inference from synced opponents (matchmaking pairs similar MMR):
       // rolling sample once battle-sync populates pending_battle_opponent.
