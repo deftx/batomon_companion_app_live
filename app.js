@@ -2663,6 +2663,11 @@
   // re-sim. Empty while there's no board to fight with.
   function heroWinHTML() {
     if (!lastLiveWin || !live.board.some(Boolean)) return '';
+    // There is no "today's battle" once the run is over — showing a confident
+    // "~90% FAVORED" directly above a "RUN ENDED — 0 lives" banner reads as a
+    // contradiction. Same condition the end-of-run banner uses, so the two agree.
+    const stillPlayingEndless = live.badges >= 10 && live.lives > 0 && syncStatus === 'live';
+    if (!stillPlayingEndless && (live.lives <= 0 || live.runEnded)) return '';
     // The verdict MUST come from the same number it sits next to. It used to read
     // the closed-form margin while the % came from the Monte-Carlo sim, which could
     // render a red "~40%" beside a green "FAVORED" on the same line.
