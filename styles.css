@@ -701,3 +701,255 @@ header { flex: none; }
 #bc-update-block .upd-cta:hover { filter: brightness(1.08); }
 #bc-update-block .upd-fine { font-size: 11px; color: var(--muted); margin: 0; }
 #bc-update-block code { background: var(--bg2); padding: 1px 6px; border-radius: 5px; }
+
+/* ============================================================================
+   DESIGN v2 — "SaaS-modern, still gamified"
+   A layer on top of the original sheet (loaded last, so it wins). Goals:
+   breathe more, better font, nothing too tiny or too huge, sizes that respond
+   to the VIEWPORT, and a retractable sidebar (Mobalytics pattern).
+
+   How it works:
+   - One type scale + one spacing scale, both built on clamp() so every value
+     interpolates with viewport width instead of jumping at breakpoints.
+   - Cards/nav/controls are re-skinned from those tokens, so density stays
+     consistent everywhere instead of drifting per-component.
+   ========================================================================== */
+:root {
+  /* TYPE SCALE (fluid: min at ~360px, max at ~1600px) */
+  --fs-2xs: clamp(9.5px, 0.62vw + 7.4px, 11px);
+  --fs-xs:  clamp(10.5px, 0.68vw + 8.2px, 12px);
+  --fs-sm:  clamp(11.5px, 0.75vw + 9px,   13px);
+  --fs-md:  clamp(12.5px, 0.82vw + 9.8px, 14.5px);
+  --fs-lg:  clamp(14px,   1.05vw + 10.5px, 17px);
+  --fs-xl:  clamp(17px,   1.5vw + 12px,    22px);
+  --fs-2xl: clamp(21px,   2.1vw + 14px,    30px);
+
+  /* SPACING SCALE (fluid) */
+  --sp-1: clamp(4px, 0.28vw + 3px, 6px);
+  --sp-2: clamp(7px, 0.5vw + 5px, 11px);
+  --sp-3: clamp(11px, 0.75vw + 8.4px, 16px);
+  --sp-4: clamp(15px, 1.1vw + 11px, 23px);
+  --sp-5: clamp(21px, 1.6vw + 15px, 32px);
+
+  /* SHAPE & DEPTH */
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-pill: 999px;
+  --shadow-1: 0 1px 2px rgba(0,0,0,.28);
+  --shadow-2: 0 6px 20px rgba(0,0,0,.32);
+  --shadow-3: 0 16px 44px rgba(0,0,0,.44);
+  --ring: 0 0 0 3px rgba(90,162,255,.24);
+
+  --sidebar-w: clamp(190px, 14vw, 232px);
+  --sidebar-w-collapsed: 62px;
+
+  /* slightly deeper, less flat surfaces */
+  --card: #171c29;
+  --card2: #1e2434;
+  --border: #29314a;
+}
+
+/* TYPOGRAPHY
+   Segoe UI Variable is the modern Win11 face (what makes native apps feel
+   "designed" rather than "default"); Inter/system-ui cover everyone else.
+   Optical sizing + antialiasing kill the heavy, muddy look. */
+body {
+  font-family: "Segoe UI Variable Text", "Segoe UI Variable", Inter, ui-sans-serif,
+               system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: var(--fs-md);
+  line-height: 1.62;
+  letter-spacing: .005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-optical-sizing: auto;
+}
+h1, h2, h3, h4 {
+  font-family: "Segoe UI Variable Display", "Segoe UI Variable", Inter, ui-sans-serif,
+               system-ui, "Segoe UI", sans-serif;
+  line-height: 1.24;
+  letter-spacing: -.012em;
+  font-weight: 700;
+}
+h2 { font-size: var(--fs-xl); margin: 0 0 var(--sp-3); }
+h3 { font-size: var(--fs-lg); margin: 0 0 var(--sp-2); }
+h4 { font-size: var(--fs-md); }
+/* numbers line up in tables/stats instead of dancing */
+table, .stats, .pct, .pill, .chip { font-variant-numeric: tabular-nums; }
+
+/* LAYOUT: give the page room to breathe */
+main, #layout > main { padding: var(--sp-4) var(--sp-5) calc(var(--sp-5) * 2.4); }
+main { max-width: 1460px; }
+
+/* CARDS: softer, deeper, roomier */
+.card {
+  padding: var(--sp-4);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--card) 0%, #151a26 100%);
+  box-shadow: var(--shadow-1);
+  transition: border-color .16s ease, box-shadow .16s ease;
+}
+.card { margin-bottom: var(--sp-3); }
+.card:hover { box-shadow: var(--shadow-2); }
+.card h3 { margin-bottom: var(--sp-2); }
+.note {
+  font-size: var(--fs-xs);
+  line-height: 1.62;
+  margin-bottom: var(--sp-3);
+  max-width: 78ch;              /* measure - long paragraphs stop feeling like walls */
+}
+
+/* CONTROLS: bigger tap targets, clear focus, no more cramped chips */
+button, .ghost, .primary {
+  font-family: inherit;
+  border-radius: var(--r-sm);
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .1s ease;
+}
+button:active { transform: translateY(1px); }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: none; box-shadow: var(--ring); }
+.primary { padding: var(--sp-2) var(--sp-4); font-size: var(--fs-sm); font-weight: 700; }
+.ghost   { padding: var(--sp-1) var(--sp-3); font-size: var(--fs-xs); font-weight: 600; }
+input, select { font-family: inherit; font-size: var(--fs-sm); padding: var(--sp-2); border-radius: var(--r-sm); }
+.pill, .chip { border-radius: var(--r-pill); padding: 2px var(--sp-2); font-size: var(--fs-2xs); }
+
+/* TABLES: air between rows */
+table.stats { border-collapse: separate; border-spacing: 0; }
+table.stats th { font-size: var(--fs-2xs); letter-spacing: .5px; text-transform: uppercase; color: var(--muted); padding: var(--sp-1) var(--sp-2); }
+table.stats td { padding: var(--sp-1) var(--sp-2); }
+
+/* ---- RETRACTABLE SIDEBAR ------------------------------------------------
+   Collapses to an icon rail (Mobalytics). The emoji IS the icon, so collapsed
+   mode stays readable; labels hide and the rail narrows. State persists. */
+header { padding: var(--sp-3) var(--sp-4); gap: var(--sp-3); }
+header h1 { font-size: var(--fs-lg); }
+header .sub { font-size: var(--fs-xs); }
+
+#nav {
+  width: var(--sidebar-w); min-width: var(--sidebar-w);
+  padding: var(--sp-4) var(--sp-2);
+  gap: var(--sp-1);
+  transition: width .18s ease, min-width .18s ease, padding .18s ease;
+}
+#nav button {
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+#nav button.active {
+  background: linear-gradient(90deg, rgba(90,162,255,.16), rgba(90,162,255,.05));
+  border-color: rgba(90,162,255,.42);
+  color: var(--text);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+/* the toggle sits at the top of the rail */
+#nav-toggle {
+  width: 100%; margin-bottom: var(--sp-2);
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+  padding: var(--sp-1) var(--sp-2); border-radius: var(--r-md);
+  cursor: pointer; font-size: var(--fs-xs); font-weight: 700;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+#nav-toggle:hover { color: var(--text); background: var(--card); border-color: var(--accent); }
+
+body.nav-collapsed #nav { width: var(--sidebar-w-collapsed); min-width: var(--sidebar-w-collapsed); padding-left: 7px; padding-right: 7px; }
+/* hide the words, keep the emoji (first character of every label) */
+body.nav-collapsed #nav button { justify-content: center; text-align: center; padding-left: 0; padding-right: 0; font-size: 0; }
+body.nav-collapsed #nav button::first-letter { font-size: var(--fs-xl); }
+body.nav-collapsed #nav-toggle { font-size: var(--fs-md); }
+body.nav-collapsed #nav .nav-gap { margin-left: 4px; margin-right: 4px; }
+
+/* SPRITES: never microscopic, never blown up */
+.band-items .tier-item img.sprite, .pk-row img.sprite { width: clamp(26px, 2vw, 34px); height: auto; }
+
+/* SCROLLBAR: quiet, modern */
+#layout > main { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+#layout > main::-webkit-scrollbar { width: 10px; }
+#layout > main::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--r-pill); border: 3px solid transparent; background-clip: content-box; }
+#layout > main::-webkit-scrollbar-thumb:hover { background: #3a4566; background-clip: content-box; }
+
+/* MOBILE: the rail becomes a scrollable top strip again */
+@media (max-width: 700px) {
+  #nav, body.nav-collapsed #nav { width: auto; min-width: 0; padding: var(--sp-2); }
+  body.nav-collapsed #nav button { font-size: var(--fs-sm); }
+  body.nav-collapsed #nav button::first-letter { font-size: inherit; }
+  #nav-toggle { display: none; }        /* no rail to collapse on phones */
+  main, #layout > main { padding: var(--sp-3) var(--sp-3) var(--sp-5); }
+}
+
+/* --- density overrides: beat the older, more-specific cockpit rules -------
+   The original sheet hard-codes tight paddings for the Live Run columns
+   (".lv-col .card { padding: 13px 15px }") and the small-screen block. Those
+   out-specify the token rule above, so re-state them ON the scale here: the
+   cockpit stays a little denser than a content page, but it still breathes. */
+.lv-col .card { padding: var(--sp-3); }
+.lv-col { gap: var(--sp-3); }
+.live-grid { gap: var(--sp-3); }
+.advisor-grid { gap: var(--sp-3); }
+.who-grid { gap: var(--sp-3); }
+.band-items { gap: var(--sp-2); }
+.pk-row { padding: var(--sp-2) var(--sp-3); border-radius: var(--r-md); }
+.tier-item { padding: var(--sp-2); border-radius: var(--r-md); }
+.day-block { padding: var(--sp-2) var(--sp-3); border-radius: var(--r-md); }
+.verdict { padding: var(--sp-2) var(--sp-3); border-radius: var(--r-md); }
+.reroll-note { padding: var(--sp-2) var(--sp-3); border-radius: var(--r-md); }
+.subnav { gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.slot { border-radius: var(--r-md); }
+
+/* the one card that hard-codes its own padding inline stays as authored, but
+   give every OTHER card the same rhythm even inside grids */
+.detail-grid { gap: var(--sp-3); }
+
+@media (max-width: 700px) {
+  .card { padding: var(--sp-3); }
+  .lv-col .card { padding: var(--sp-2) var(--sp-3); }
+}
+
+/* --- INLINE-SIZE NORMALISER -----------------------------------------------
+   The app builds most of its UI as HTML strings with hardcoded inline sizes
+   (371 of them, from 8px to 44px). That's what made everything read "too tiny
+   or too big" and stopped text from responding to the viewport.
+
+   Rather than rewrite 371 call sites, map each hardcoded value onto the fluid
+   type scale by matching the inline style itself. Result: one coherent scale,
+   a readable floor (nothing below ~9.5px), and every label now scales with the
+   window like the rest of the UI. Substring matches are exact — "font-size:1px"
+   is not a substring of "font-size:11px", so there is no cross-matching.       */
+[style*="font-size:8px"],
+[style*="font-size:8.5px"],
+[style*="font-size:9px"],
+[style*="font-size:9.5px"]   { font-size: var(--fs-2xs) !important; }
+
+[style*="font-size:10px"],
+[style*="font-size:10.5px"]  { font-size: var(--fs-xs) !important; }
+
+[style*="font-size:11px"],
+[style*="font-size:11.5px"],
+[style*="font-size:12px"],
+[style*="font-size:12.5px"]  { font-size: var(--fs-sm) !important; }
+
+[style*="font-size:13px"],
+[style*="font-size:13.5px"],
+[style*="font-size:14px"],
+[style*="font-size:14.5px"]  { font-size: var(--fs-md) !important; }
+
+[style*="font-size:15px"],
+[style*="font-size:16px"],
+[style*="font-size:17px"]    { font-size: var(--fs-lg) !important; }
+
+[style*="font-size:20px"],
+[style*="font-size:21px"],
+[style*="font-size:22px"],
+[style*="font-size:23px"],
+[style*="font-size:24px"]    { font-size: var(--fs-xl) !important; }
+
+[style*="font-size:26px"],
+[style*="font-size:30px"],
+[style*="font-size:34px"]    { font-size: var(--fs-2xl) !important; }
+
+/* Hero numerals (the big win% and the 44px avatar glyph) get their own step so
+   they stay dominant without blowing out narrow windows. */
+[style*="font-size:44px"] { font-size: clamp(30px, 3.4vw + 18px, 46px) !important; }
+
+/* SVG text is sized in user units inside a viewBox — it already scales with the
+   chart, so exclude it from the normaliser. */
+svg [style*="font-size"], svg text { font-size: revert !important; }

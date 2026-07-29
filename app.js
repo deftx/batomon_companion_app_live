@@ -386,12 +386,28 @@
 
   // ---------------- tabs ----------------
   $('#nav').addEventListener('click', (e) => {
-    const b = e.target.closest('button'); if (!b) return;
-    document.querySelectorAll('#nav button').forEach(x => x.classList.toggle('active', x === b));
+    const b = e.target.closest('button'); if (!b || !b.dataset.tab) return; // ignore the collapse toggle
+    document.querySelectorAll('#nav button[data-tab]').forEach(x => x.classList.toggle('active', x === b));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     $('#tab-' + b.dataset.tab).classList.add('active');
     if (b.dataset.tab === 'profile') renderProfile(); // profile hosts the run history section
   });
+  // ⬅ retractable sidebar — collapses to an emoji rail; choice persists across sessions
+  (function () {
+    const btn = $('#nav-toggle'); if (!btn) return;
+    const apply = (collapsed) => {
+      document.body.classList.toggle('nav-collapsed', collapsed);
+      btn.textContent = collapsed ? '⟩⟩' : '⟨⟨ Collapse';
+      btn.title = collapsed ? 'Expand the sidebar' : 'Collapse the sidebar';
+      btn.setAttribute('aria-label', btn.title);
+    };
+    apply(localStorage.getItem('bc_navCollapsed') === '1');
+    btn.onclick = () => {
+      const now = !document.body.classList.contains('nav-collapsed');
+      localStorage.setItem('bc_navCollapsed', now ? '1' : '0');
+      apply(now);
+    };
+  })();
 
   // ---------------- modal ----------------
   const modalBg = $('#modal-bg'), modal = $('#modal');
