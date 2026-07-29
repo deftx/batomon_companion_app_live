@@ -6,24 +6,43 @@ Unofficial fan project. Free, local, no account, no telemetry.
 
 ---
 
-## Install & run
+## Install (Windows) — no terminal needed
 
-You need [Node.js](https://nodejs.org) (v18+). No dependencies, no build step.
+**Step 1 — Install Node.js (once, ~1 minute).**
+Go to **[nodejs.org/en/download](https://nodejs.org/en/download)**, download the Windows **LTS** version, run the installer and click Next until it finishes. This is what runs the app on your PC. You never have to touch it again.
 
-1. **[⬇ Download the latest version](https://github.com/deftx/batomon_companion_app_live/releases/latest/download/batomon-companion.zip)** and unzip it anywhere.
-2. Open a terminal in that folder and run:
+**Step 2 — Download the app.**
+**[⬇ batomon-companion.zip](https://github.com/deftx/batomon_companion_app_live/releases/latest/download/batomon-companion.zip)**
 
-```bash
-node server.js
-```
+**Step 3 — Unzip it. This part matters.**
+Find the file in your **Downloads**, **right-click → "Extract All…" → Extract**. Anywhere is fine (Desktop is easiest).
 
-3. Open **http://localhost:8137** in your browser.
+> ⚠️ Don't skip this. If you double-click the zip, Windows *shows* you the files but they're not really on your PC yet, and the app won't start. You must extract first.
 
-That's it. To update later, download again and unzip over the same folder — your runs, rank and settings live in the browser and are kept.
+**Step 4 — Double-click `start.cmd`** inside the extracted folder.
 
-### Windows shortcut
+A black window opens and your browser follows a few seconds later. **That's it — you're running.**
 
-Double-click **`start.cmd`** instead of using a terminal.
+**Leave the black window open while you play.** It *is* the app. Closing it stops it. To play again another day, just double-click `start.cmd` again.
+
+### If something goes wrong
+
+| What you see | What it means |
+|---|---|
+| **The browser says it can't reach the page** | The app needs a few seconds to start. Wait, then refresh — or go to **http://localhost:8137** yourself. |
+| **The black window says Node.js is not installed** | Step 1 was skipped or didn't finish. It'll open the download page for you. |
+| **The black window mentions the zip** | Step 3 was skipped — extract the zip, then run `start.cmd` from the extracted folder. |
+| **The black window flashes and vanishes** | `start.cmd` was moved out of the folder on its own. Re-extract and keep it with the other files. |
+
+Still stuck? Open an [issue](https://github.com/deftx/batomon_companion_app_live/issues) or ping me on Discord (**jonthegym**) — tell me what the black window said and I'll sort it.
+
+### Updating
+
+Download the zip again and extract it over the same folder. Your runs, rank and settings live in your browser, so nothing is lost.
+
+### Mac / Linux
+
+No `start.cmd` there — open a terminal in the folder and run `node server.js`, then visit **http://localhost:8137**.
 
 ---
 
