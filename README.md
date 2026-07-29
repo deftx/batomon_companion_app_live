@@ -10,7 +10,7 @@ Unofficial fan project. Free, local, no account, no telemetry.
 
 You need [Node.js](https://nodejs.org) (v18+). No dependencies, no build step.
 
-1. **[⬇ Download the latest version](https://github.com/deftx/batomon_companion_app_live/archive/refs/heads/main.zip)** and unzip it anywhere.
+1. **[⬇ Download the latest version](https://github.com/deftx/batomon_companion_app_live/releases/latest/download/batomon-companion.zip)** and unzip it anywhere.
 2. Open a terminal in that folder and run:
 
 ```bash
