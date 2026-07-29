@@ -2304,7 +2304,12 @@
     openModal(box);
   }
   // 📦 EXPORT / IMPORT — the archive is the user's asset; never trap it.
-  const BC_KEYS = ['bc_live', 'bc_runs', 'bc_simnoise', 'bc_notify', 'bc_ingest', 'bc_sync', 'bc_tour'];
+  // Everything the app persists that represents the PLAYER (not a transient UI
+  // flag). The rank block was missing here, so a backup silently dropped your
+  // tier/stars, the MMR calibration learned from real opponents, and the per-rank
+  // anchors — restore it on a new machine and the ladder work was simply gone.
+  const BC_KEYS = ['bc_live', 'bc_runs', 'bc_simnoise', 'bc_notify', 'bc_ingest', 'bc_sync', 'bc_tour',
+    'bc_rankmanual', 'bc_rankAnchors', 'bc_rankLastApplied', 'bc_mmrEst', 'bc_mmrSamples', 'bc_hpCurve'];
   function exportData() {
     const out = { app: 'batomon-companion', v: 1, exportedAt: new Date().toISOString() };
     BC_KEYS.forEach(k => { const v = localStorage.getItem(k); if (v != null) out[k] = v; });
