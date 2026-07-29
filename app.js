@@ -11,8 +11,7 @@
   // ☕ support link — paste your Buy Me a Coffee URL here when the page is set up
   // (e.g. 'https://buymeacoffee.com/julian'). Empty = the button opens the Who am I tab.
   const COFFEE_URL = 'https://buymeacoffee.com/jonthegym';
-  // 💬 shown on the Feedback tab so people can add/DM you directly.
-  // TODO Julian: put your real Discord username here (e.g. 'julian_wf').
+  // 💬 contact shown on the Feedback tab so people can add/DM directly.
   const DISCORD_USERNAME = 'jonthegym';
   const FR = () => window.LANG && window.LANG.lang === 'fr' && G.FR;
   const GDAYS = () => (FR() ? G.FR.DAYS : G.DAYS);
