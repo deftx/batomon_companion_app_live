@@ -281,7 +281,7 @@ window.Engine = (function () {
       if (!m) return null;
       const chips = [];
 
-      // Merge modeling (3-copy rule, Julian 2026-07-23: "merge 3 is 3 lvl1 makes a
+      // Merge modeling (3-copy rule, verified in-game 2026-07-23: "merge 3 is 3 lvl1 makes a
       // lvl2 up to lvl3"): THREE same-level copies combine into ONE of the next
       // level (3×L1→L2, 3×L2→L3) — two copies do NOT merge. So owning `owned`
       // copies + this buy = owned+1 copies, whose best single unit is L2 at 3+ and
@@ -537,7 +537,7 @@ window.Engine = (function () {
     // can't lift a support/enabler over a carry that real-data WR inflates, so
     // we FLOOR declared pieces above the field, tie-broken by their own raw.
     // Priority: adopted strategy piece > comp/run-plan piece > everything else.
-    // (Julian: an obvious comp piece like Magmalith was ranking #4 behind
+    // (Observed: an obvious comp piece like Magmalith was ranking #4 behind
     // flat-stat/WR picks — the run plan is the point, it should be #1.)
     const fieldMax = Math.max(...rows.map(r => r.raw), 0.001);
     const isStrat = (r) => ctx.stratIds && (ctx.stratIds.has(r.m.id) || (r.effId && ctx.stratIds.has(r.effId)));

@@ -105,7 +105,7 @@
   }
 
   // ---------------- RUN-FIT: does this trinket match the run you're ACTUALLY
-  // having? (Julian: "not only rely on WR but also the run I'm having.") Each
+  // having? (design goal: not only rely on WR, but on the run you're having.) Each
   // trinket → an effect descriptor; fit is scored 0..1 against the LIVE board's
   // types, damage vectors and mechanics — so Fire Orb rockets up in a burn comp
   // and sinks on a shock board, regardless of its middling global win rate.
@@ -1485,7 +1485,7 @@
     { id: 'Diamond', base: 1200, c: '#b9e2ff', icon: '💎' },
     { id: 'Master', base: 1900, c: '#c77bff', icon: '👑' },
   ];
-  // ---- Ranked ladder math (Julian's EXACT rule, 2026-07-15) ----
+  // ---- Ranked ladder math (exact in-game rule, confirmed 2026-07-15) ----
   // A ranked run changes your STARS by (badges − 5), clamped to ±5:
   //   0🏅 → −5★ · 5🏅 → No Change · 10🏅 → +5★.  A division = exactly 5 stars
   //   (filling the 5th PROMOTES immediately). Division NUMBERS COUNT DOWN as you
@@ -1561,7 +1561,7 @@
       <span style="color:var(--muted)">${arrow}</span>${applyBtn}
     </div>`;
   }
-  // Auto-apply a finished RANKED run's star delta to the saved rank (Julian: the
+  // Auto-apply a finished RANKED run's star delta to the saved rank (design goal: the
   // companion must "remember rank and update when loss or win in ranked" — no
   // manual click). Applied at most once per run (bc_rankLastApplied guard); backs
   // up the prior rank to bc_rankUndo. No-op if no rank baseline is set yet.
@@ -2439,7 +2439,7 @@
     }
     return fedNames;
   }
-  // MERGE RULE (Julian 2026-07-23: "merge 3 is 3 lvl1 makes a lvl2 up to lvl3"):
+  // MERGE RULE (verified in-game 2026-07-23 — 3x L1 makes an L2, up to L3):
   // THREE copies of the same level combine into ONE of the next level (3×L1→L2,
   // 3×L2→L3). TWO copies do NOT merge — they sit as separate bodies (matches the
   // save that showed 2 separate L1 Pebblers). Merging TOPS OUT at L3; Level 4 is
@@ -2699,7 +2699,7 @@
           // on your last life playing the 10th-badge battle, and winning it (champion)
           // vs losing it (death) leave the game sync in the same state. Ask, don't
           // guess — this also RETROACTIVELY offers the fix for a run an older sync
-          // mislabelled (Julian's "died at 9" that was really a champion). Suppressed
+          // mislabelled (a run logged "died at 9" that was really a champion). Suppressed
           // once resolved. (A 2+-life 9🏅 vanish was already promoted to 10 = champion.)
           const amb = bBadges === 9 && live.isRanked && live.runEndedResolved !== runSig;
           return `<div class="reroll-note" style="border-color:${amb ? 'var(--gold)' : rm.color};margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
@@ -2816,7 +2816,7 @@
     // tell a WON 10th-badge (champion, from 1 life) from a LOST one (death) — both
     // leave the same {9, 1} snapshot — so instead of guessing (and applying a wrong
     // rank), the player confirms 🏆/💀 here. We patch the archived run + apply the
-    // correct star delta on their answer. (Julian 2026-07-24 false-non-champion fix.)
+    // correct star delta on their answer. (False-non-champion fix, 2026-07-24.)
     document.querySelectorAll('.rez-end').forEach(b => b.onclick = () => {
       const won = b.dataset.won === '1';
       const sig = b.dataset.sig;
@@ -3190,7 +3190,7 @@
   // ================= BATTLE BRAIN =================
   // Positional donors: units whose ability buffs a specific slot/relation.
   const DONORS = {
-    // in-game: arrow points LEFT — buffs the ally BEHIND it (Julian, definitive).
+    // in-game: arrow points LEFT — buffs the ally BEHIND it (verified, definitive).
     // The earlier "points right" note was an artifact of a mirrored board mapping
     // (now fixed); with the correct 180° board, behind = LEFT is the true dir.
     boomagon:  { dir: 'behind', kind: 'cds', rate: 0.04, desc: '+4% Cooldown Speed per cast (permanent)' },
@@ -3558,7 +3558,7 @@
       v += u.dps + u.poisonApp * T / 2 + u.heal * 0.5 + u.shield * 0.6;
       teamShock += u.shockApp; teamBurn += u.burnApp; teamHits += u.hitRate || 0;
       // NO front/back "exposure" term: the game uses a SHARED team HP pool with no
-      // targeting or focus-fire (Julian confirmed) — units don't die individually, so
+      // targeting or focus-fire (confirmed in-game) — units don't die individually, so
       // which column a tank/carry sits in never changes who gets hit. Column only
       // matters for DIRECTIONAL DONOR passives (behind/front/above, handled by
       // positionalBonuses below) and "opposite"-targeting abilities (e.g. Reapra).
@@ -3716,7 +3716,7 @@
   // Per-cast amounts from unitOutput's per-second rates; static positional
   // passives folded in via a stat-wise team scale (dynamic donor kinds excluded
   // — they run as discrete EVENTS inside E.simEvents).
-  // ⚔️ CAST-SCHEDULE mechanics the flat dmg×mc/cd model misses (Julian):
+  // ⚔️ CAST-SCHEDULE mechanics the flat dmg×mc/cd model misses:
   // • SELF-KO — Stingarde / Electranade / Pyronade "Knockout self" cast ONCE then
   //   remove themselves; counting them over the whole fight wildly over-states dmg.
   //   Exceptions keep casting: SHINY Stingarde (self-KO dropped — hardcoded, the data
@@ -4327,7 +4327,7 @@
       ${mine.pos && mine.pos.notes.length ? `<div class="note" style="margin:5px 0 0">📐 Your layout is feeding these numbers: <b style="color:var(--accent)">${mine.pos.notes.join(' · ')}</b>${mine.pos.add.dps > 0.5 ? ` (+${mine.pos.add.dps.toFixed(1)} DPS from positioning)` : ''} — move units and this updates.</div>` : ''}
       ${(() => {
         // ⚡ CDS DONATION SUMMARY — how much cooldown speed this round hands to
-        // one or two batomon (Julian's ask). Reads mine.pos.cdsGiven (same source
+        // one or two batomon (requested feature). Reads mine.pos.cdsGiven (same source
         // as the per-unit table), grouped by recipient.
         const cg = (mine.pos && mine.pos.cdsGiven) || [];
         const byTarget = {};
@@ -4629,7 +4629,7 @@
     }
     return { flat, pct, src };
   }
-  // Default base-HP curve MEASURED from real Master-ranked play (Julian's
+  // Default base-HP curve MEASURED from real Master-ranked play (from
   // day-by-day corrections, patch 0.8.4). The old default was a flat +100/day
   // from 300 — catastrophically low (day 12 predicted 1,400 vs real 25,700, an
   // 18× error that made every HP bar / EHP / battle verdict wrong). These
@@ -4644,7 +4644,7 @@
     // curve accumulates the HP the player TYPES, which INCLUDES their HP trinkets (a
     // Barbell run → they type ~base+5000). Letting that override the base corrupted it
     // — then suggestedHP DOUBLE-added the Barbell AND the enemy's HP (= baseHPFor)
-    // inflated. (Julian 2026-07-24 "day 8 is 8300" — a stale learned day-8 was showing
+    // inflated. (Observed 2026-07-24, "day 8 is 8300" — a stale learned day-8 was showing
     // higher.) Trinkets are added on top in suggestedHP, so the base stays pure.
     // Learned/typed overrides now apply ONLY to unmeasured days (20+, endless/extended).
     if (DEFAULT_HP_BY_DAY[day] != null) return DEFAULT_HP_BY_DAY[day];
@@ -5020,7 +5020,7 @@
     live.trainerOffers = Array.isArray(d.pending_trainer_options) && d.pending_trainer_options.length
       ? d.pending_trainer_options.filter(id => D.trainers.some(t => t.id === id)) : (live.trainerId ? null : live.trainerOffers || null);
     // ORIENTATION — the save's team[] is a 180° rotation of our grid: app slot i
-    // shows team[5−i]. Pinned from Julian's EXPLICIT layout with level-distinct
+    // shows team[5−i]. Pinned from an EXPLICIT in-game layout with level-distinct
     // Magmites (L1 vs L2) as the tiebreaker — his TL=team[5] … BR=team[0], a
     // clean reverse. (An earlier same-session "re-derivation" to an irregular
     // permutation came from a time-mismatched pair while he played — reverted.)
@@ -5256,7 +5256,7 @@
           // "lives left → you didn't die → you won." That's BACKWARDS: being on your
           // LAST life when the save vanished means you LOST the final battle before
           // lives=0 could sync. It turned an 8-badge death into a FALSE champion +
-          // a bogus +5★ rank (Julian, 2026-07-16 — died day 12 at 8🏅 on Second
+          // a bogus +5★ rank (observed 2026-07-16 — died day 12 at 8🏅 on Second
           // Chance, shown as a 10-badge champion). Only infer the champion from the
           // one safe signal: exactly 9 badges with 2+ lives to spare (you won the
           // 10th and its write deleted the save first). Otherwise trust the real
@@ -5266,7 +5266,7 @@
           //    continues, save persists), so a vanish means the 10th WIN cleared it.
           //  • 9🏅 + exactly 1 life → GENUINELY AMBIGUOUS: winning the 10th (champion)
           //    and losing it (death) BOTH leave the last-synced state {9, 1}. DON'T
-          //    guess — flag it and let the banner ASK 🏆/💀 (Julian 2026-07-24: won the
+          //    guess — flag it and let the banner ASK 🏆/💀 (observed 2026-07-24: won the
           //    10th FROM 1 life, was shown "died at 9" + a wrong −rank; the old blanket
           //    "<10 & ≤1 life → death" produced that false NON-champion).
           //  • anything else <10 on the last life → death (lost before the 10th battle).
@@ -6192,7 +6192,7 @@
       .sort((a, b) => (shareCount(b) - shareCount(a)) || (b.score - a.score))
       .slice(0, 2);
     // 📐 MULTI-PLAN reasoning — when you've ADOPTED 2+ strategies, compare THEM (not the
-    // inferred direction) and say which to chase now + when to pivot (Julian: "say when
+    // inferred direction) and say which to chase now + when to pivot (design goal: "say when
     // it's better to chase one instead of the other, in the reasoning layer").
     const adoptedIds = planIds();
     let adopted = null;
@@ -6580,7 +6580,7 @@
     // adopted plan's core → the shop hunts pieces for ALL of them, so you can keep 2+ lines
     // open); otherwise the Run Brain's INFERRED primary direction does. That feeds
     // ctx.compIds → the engine FLOORS those pieces above the field so they lead the buy
-    // order. (Julian: "the shop doesn't understand the direction I'm taking" + multi-plan.)
+    // order. (Design goal: the shop must understand the direction you're taking + multi-plan.)
     const rbrain = (() => { try { return runBrain(); } catch (e) { return null; } })();
     const adoptedPlans = planIds().map(id => buildById(id)).filter(Boolean);
     const planBuild = adoptedPlans[0] || null;
@@ -6625,7 +6625,7 @@
     const baseWin = shopRes && shopRes.rows.length ? quickWinPct(live.board, 24, 'base') : null;
     // ⚔️ Blend the immediate-battle Δwin% INTO the ranking so the #1 pick can never
     // contradict the Δwin% the app itself shows: a merge/evolution that swings THIS
-    // battle +42% must outrank a fresh +13% scaler (Julian — the ranker valued a
+    // battle +42% must outrank a fresh +13% scaler (observed — the ranker valued a
     // wall's low RAW power over a merge's real board impact). scoreShop stays the
     // long-term prior; sim-measured, merge-aware Δwin is added on the same 0–100 pct
     // scale, weighted UP when lives are scarce (win-now) and gently down when safe.
@@ -7752,7 +7752,7 @@
 
   // ---------------- DEX TAB ----------------
   // 🃏 UNIFIED BATODEX-STYLE DETAIL CARD — one look for monsters, items & trinkets
-  // (Julian: "display like that on everything, hovering batomon or clicking items/
+  // (Design goal: "display like that on everything, hovering batomon or clicking items/
   // trinkets"). Rarity-coloured header, sprite panel, TYPE badge, keyword-coloured
   // effect, cost/source footer. Reused on hover (hovercard) + click (modal) + grids.
   const _STAT_COLOR = { Damage: '#ff5d73', Burn: '#ff8a3d', Poison: '#b06fff', Shock: '#ffd166', Heal: '#3ddc84', Shield: '#5aa2ff', Multicast: '#7b93c3', Cooldown: '#66d9d9' };
@@ -8717,7 +8717,7 @@ ${rs.slots ? `<div style="display:flex;align-items:center;gap:12px;margin-top:8p
   }
 
   // ---------------- 💬 FEEDBACK TAB ----------------
-  // Form → local server → Julian's email (formsubmit relay) + private Discord
+  // Form → local server → the maintainer's email (formsubmit relay) + private Discord
   // (webhook, kept server-side). Direct contacts displayed underneath.
   function renderFeedback() {
     const root = $('#tab-feedback');

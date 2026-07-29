@@ -187,7 +187,7 @@ function handleIngest(body, ip, res) {
   } catch (e) { res.writeHead(500, hdr); res.end(JSON.stringify({ error: e.message })); }
 }
 
-// ---- feedback relay: form → Julian's email + private Discord ----
+// ---- feedback relay: form → the maintainer's email + private Discord ----
 // Email goes through formsubmit.co (zero-setup relay — the FIRST submission
 // sends a one-time activation link to the inbox; click it once and it flows).
 // Discord uses a webhook kept SERVER-side: env DISCORD_WEBHOOK or the one-line
@@ -382,7 +382,7 @@ http.createServer(async (req, res) => {
 // Keep the dataset fresh without anyone remembering to hit the Refresh button.
 // On start (after a short settle) + once a day, if data.js is older than a week
 // we re-run the same scrape pipeline as /api/refresh, headless in the background.
-// Whenever Julian has the companion open, batodex data self-heals toward current.
+// Whenever the companion is open, batodex data self-heals toward current.
 const STALE_DAYS = 7;
 function dataAgeDays() {
   try {

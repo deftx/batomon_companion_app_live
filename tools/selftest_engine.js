@@ -83,7 +83,7 @@ check(`scoreShop sweep (${shopEvals} shops) all sane`, shopBad === 0);
     strat.rows.map(r => r.m.id + ':' + r.pct).join(','));
   check('unaffordable ordering preserved, not flattened', strat.rows[0].pct > strat.rows[1].pct,
     strat.rows.map(r => r.m.id + ':' + r.pct).join(','));
-  // comp/run-plan piece leads too (Julian's Magmalith case), and strategy > comp
+  // comp/run-plan piece leads too (the Magmalith case), and strategy > comp
   const comp = E.scoreShop(shop, Object.assign({}, base, { gold: 50, compIds: new Set(['boomagon']) }));
   check('comp-plan piece ranked #1 over a flat-stat carry', comp.rows[0].m.id === 'boomagon',
     comp.rows.map(r => r.m.id + ':' + r.pct).join(','));
