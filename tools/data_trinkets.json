@@ -1,0 +1,872 @@
+[
+ {
+  "id": "gold_nugget",
+  "name": "Gold Nugget",
+  "tier": 1,
+  "sprite": "/sprites/trinket/gold_nugget.png",
+  "description": "At the start of each day, gain $3.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": {
+   "label": "Common",
+   "color": "#70707a"
+  }
+ },
+ {
+  "id": "gold_trophy",
+  "name": "Gold Trophy",
+  "tier": 1,
+  "sprite": "/sprites/trinket/gold_trophy.png",
+  "description": "On Victory\nGain $8.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "mini_duplicator",
+  "name": "Mini Duplicator",
+  "tier": 1,
+  "sprite": "/sprites/trinket/mini_duplicator.png",
+  "description": "Gain an additional copy of the next Trinket you get from a gift.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "power_pouch",
+  "name": "Power Pouch",
+  "tier": 1,
+  "sprite": "/sprites/trinket/power_pouch.png",
+  "description": "When you buy an item, give your monsters +2 Damage.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "quick_bell",
+  "name": "Quick Bell",
+  "tier": 1,
+  "sprite": "/sprites/trinket/quick_bell.png",
+  "description": "Monsters in your shop have +5% Cooldown Speed.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "rainbow_berry",
+  "name": "Rainbow Berry",
+  "tier": 1,
+  "sprite": "/sprites/trinket/rainbow_berry.png",
+  "description": "Your monsters have +4 Damage for each unique type on your team.",
+  "isUnique": false,
+  "sources": {
+   "pool": false,
+   "events": [
+    {
+     "id": "rainbow_berry",
+     "name": "Rainbow Berry"
+    }
+   ],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "training_weights",
+  "name": "Training Weights",
+  "tier": 1,
+  "sprite": "/sprites/trinket/training_weights.png",
+  "description": "+100 HP",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "treasure_map",
+  "name": "Treasure Map",
+  "tier": 1,
+  "sprite": "/sprites/trinket/treasure_map.png",
+  "description": "Your next Trinket gift choices are 1 rarity tier higher.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "wood_sword",
+  "name": "Wood Sword",
+  "tier": 1,
+  "sprite": "/sprites/trinket/wood_sword.png",
+  "description": "Your monsters have +5 Damage.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "bug_net",
+  "name": "Bug Net",
+  "tier": 2,
+  "sprite": "/sprites/trinket/bug_net.png",
+  "description": "Bug monsters in the shop cost 3 less.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": {
+   "label": "Uncommon",
+   "color": "#4ab500"
+  }
+ },
+ {
+  "id": "fire_orb",
+  "name": "Fire Orb",
+  "tier": 2,
+  "sprite": "/sprites/trinket/fire_orb.png",
+  "description": "Your Fire monsters have +3 Burn.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:9:rarity"
+ },
+ {
+  "id": "market_license",
+  "name": "Market License",
+  "tier": 2,
+  "sprite": "/sprites/trinket/market_license.png",
+  "description": "Increase shop rank by 1.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:9:rarity"
+ },
+ {
+  "id": "membership_card",
+  "name": "Membership Card",
+  "tier": 2,
+  "sprite": "/sprites/trinket/membership_card.png",
+  "description": "When you buy an item, +1 free rerolls.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:9:rarity"
+ },
+ {
+  "id": "piggy_bank",
+  "name": "Piggy Bank",
+  "tier": 2,
+  "sprite": "/sprites/trinket/piggy_bank.png",
+  "description": "Gain +$1 for each $10 you have at the end of each day.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:9:rarity"
+ },
+ {
+  "id": "poison_orb",
+  "name": "Poison Orb",
+  "tier": 2,
+  "sprite": "/sprites/trinket/poison_orb.png",
+  "description": "Your Toxic monsters have +3 Poison.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:9:rarity"
+ },
+ {
+  "id": "power_band",
+  "name": "Power Band",
+  "tier": 2,
+  "sprite": "/sprites/trinket/power_band.png",
+  "description": "Give the first monster you buy each day +20 Damage.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:9:rarity"
+ },
+ {
+  "id": "power_crown",
+  "name": "Power Crown",
+  "tier": 2,
+  "sprite": "/sprites/trinket/power_crown.png",
+  "description": "Your top middle monster has +20 Damage.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:9:rarity"
+ },
+ {
+  "id": "ancient_plume",
+  "name": "Ancient Plume",
+  "tier": 3,
+  "sprite": "/sprites/trinket/ancient_plume.png",
+  "description": "On Battle Start\nIf you only have 1 monster, give it +1 Multicast permanently and destroy this.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": {
+   "label": "Rare",
+   "color": "#0084bd"
+  }
+ },
+ {
+  "id": "gold_bar",
+  "name": "Gold Bar",
+  "tier": 3,
+  "sprite": "/sprites/trinket/gold_bar.png",
+  "description": "At the start of each day, gain $10.",
+  "isUnique": false,
+  "sources": {
+   "pool": false,
+   "events": [
+    {
+     "id": "pond_fairy",
+     "name": "Pond Fairy"
+    }
+   ],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "heros_sword",
+  "name": "Hero's Sword",
+  "tier": 3,
+  "sprite": "/sprites/trinket/heros_sword.png",
+  "description": "Your monsters have +12 Damage.",
+  "isUnique": false,
+  "sources": {
+   "pool": false,
+   "events": [
+    {
+     "id": "dragons_nest",
+     "name": "Dragons Nest"
+    }
+   ],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "link_cable",
+  "name": "Link Cable",
+  "tier": 3,
+  "sprite": "/sprites/trinket/link_cable.png",
+  "description": "All of your team's monsters are now considered adjacent to each other.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "mega_duplicator",
+  "name": "Mega Duplicator",
+  "tier": 3,
+  "sprite": "/sprites/trinket/mega_duplicator.png",
+  "description": "Gain 2 additional copies of the next Trinket you get from a gift.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "meteorite",
+  "name": "Meteorite",
+  "tier": 3,
+  "sprite": "/sprites/trinket/meteorite.png",
+  "description": "On Battle Start\nYour monsters with no abilities gain +20 Damage permanently.",
+  "isUnique": false,
+  "sources": {
+   "pool": false,
+   "events": [
+    {
+     "id": "meteor_crash",
+     "name": "Meteor Crash"
+    }
+   ],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "power_bell",
+  "name": "Power Bell",
+  "tier": 3,
+  "sprite": "/sprites/trinket/power_bell.png",
+  "description": "Monsters in your shop have +25 Damage.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "sapphire_amulet",
+  "name": "Sapphire Amulet",
+  "tier": 3,
+  "sprite": "/sprites/trinket/sapphire_amulet.png",
+  "description": "You receive 25% more Heal.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "silver_watch",
+  "name": "Silver Watch",
+  "tier": 3,
+  "sprite": "/sprites/trinket/silver_watch.png",
+  "description": "When a monster levels up, it gains +15% Cooldown Speed.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "speed_crest",
+  "name": "Speed Crest",
+  "tier": 3,
+  "sprite": "/sprites/trinket/speed_crest.png",
+  "description": "Your monsters in the rightmost column have +20% Cooldown Speed.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "terrarium",
+  "name": "Terrarium",
+  "tier": 3,
+  "sprite": "/sprites/trinket/terrarium.png",
+  "description": "Your Bug monsters have +20% Damage.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "topaz_amulet",
+  "name": "Topaz Amulet",
+  "tier": 3,
+  "sprite": "/sprites/trinket/topaz_amulet.png",
+  "description": "You receive 25% more Shield.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "warhorn",
+  "name": "Warhorn",
+  "tier": 3,
+  "sprite": "/sprites/trinket/warhorn.png",
+  "description": "On Battle Start\nYour monsters gain +10 Damage permanently.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:17:rarity"
+ },
+ {
+  "id": "blitz_bell",
+  "name": "Blitz Bell",
+  "tier": 4,
+  "sprite": "/sprites/trinket/blitz_bell.png",
+  "description": "Monsters in your shop have +30% Cooldown Speed.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": {
+   "label": "Super Rare",
+   "color": "#a040a0"
+  }
+ },
+ {
+  "id": "echo_bell",
+  "name": "Echo Bell",
+  "tier": 4,
+  "sprite": "/sprites/trinket/echo_bell.png",
+  "description": "When you buy a 0 cost item, use it an additional time.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:30:rarity"
+ },
+ {
+  "id": "haste_crown",
+  "name": "Haste Crown",
+  "tier": 4,
+  "sprite": "/sprites/trinket/haste_crown.png",
+  "description": "Your top middle monster has +30% Cooldown Speed.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:30:rarity"
+ },
+ {
+  "id": "haste_orb",
+  "name": "Haste Orb",
+  "tier": 4,
+  "sprite": "/sprites/trinket/haste_orb.png",
+  "description": "Your monsters have +15% Cooldown Speed.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:30:rarity"
+ },
+ {
+  "id": "mysterious_charm",
+  "name": "Mysterious Charm",
+  "tier": 4,
+  "sprite": "/sprites/trinket/mysterious_charm.png",
+  "description": "+25% HP",
+  "isUnique": true,
+  "sources": {
+   "pool": false,
+   "events": [
+    {
+     "id": "endless_boss_prep",
+     "name": "Endless Boss Prep"
+    },
+    {
+     "id": "second_chance",
+     "name": "Second Chance"
+    }
+   ],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:30:rarity"
+ },
+ {
+  "id": "mysterious_mask",
+  "name": "Mysterious Mask",
+  "tier": 4,
+  "sprite": "/sprites/trinket/mysterious_mask.png",
+  "description": "Choose a trainer and gain their ability.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": [
+    {
+     "id": "masked_man",
+     "name": "Masked Man"
+    }
+   ]
+  },
+  "rarity": "$15:props:children:0:props:entries:30:rarity"
+ },
+ {
+  "id": "razor_beak",
+  "name": "Razor Beak",
+  "tier": 4,
+  "sprite": "/sprites/trinket/razor_beak.png",
+  "description": "Your Flying monsters have +1 Multicast.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:30:rarity"
+ },
+ {
+  "id": "repeater_charm",
+  "name": "Repeater Charm",
+  "tier": 4,
+  "sprite": "/sprites/trinket/repeater_charm.png",
+  "description": "Your monsters' On Battle Start abilities activate an additional time.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:30:rarity"
+ },
+ {
+  "id": "upgrade_disc",
+  "name": "Upgrade Disc",
+  "tier": 4,
+  "sprite": "/sprites/trinket/upgrade_disc.png",
+  "description": "When you buy a monster, level it up and destroy this.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:30:rarity"
+ },
+ {
+  "id": "vip_pass",
+  "name": "VIP Pass",
+  "tier": 4,
+  "sprite": "/sprites/trinket/vip_pass.png",
+  "description": "Your shop no longer stocks anything Common or Uncommon.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:30:rarity"
+ },
+ {
+  "id": "barbell",
+  "name": "Barbell",
+  "tier": 5,
+  "sprite": "/sprites/trinket/barbell.png",
+  "description": "+5000 HP",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": {
+   "label": "Legendary",
+   "color": "#d47c00"
+  }
+ },
+ {
+  "id": "dryads_charm",
+  "name": "Dryad's Charm",
+  "tier": 5,
+  "sprite": "/sprites/trinket/dryads_charm.png",
+  "description": "+30% HP",
+  "isUnique": true,
+  "sources": {
+   "pool": false,
+   "events": [
+    {
+     "id": "dryad_statue",
+     "name": "Dryad Statue"
+    }
+   ],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:40:rarity"
+ },
+ {
+  "id": "fancy_sword",
+  "name": "Fancy Sword",
+  "tier": 5,
+  "sprite": "/sprites/trinket/fancy_sword.png",
+  "description": "Your monsters have +3%  for each trinket you have.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:40:rarity"
+ },
+ {
+  "id": "gold_o_matic",
+  "name": "Gold-o-matic",
+  "tier": 5,
+  "sprite": "/sprites/trinket/gold_o_matic.png",
+  "description": "At the start of each day, gain $30.",
+  "isUnique": false,
+  "sources": {
+   "pool": false,
+   "events": [
+    {
+     "id": "genius_inventor",
+     "name": "Genius Inventor"
+    }
+   ],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:40:rarity"
+ },
+ {
+  "id": "metronome",
+  "name": "Metronome",
+  "tier": 5,
+  "sprite": "/sprites/trinket/metronome.png",
+  "description": "When your monster cast, they gain +10 Damage for this battle.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:40:rarity"
+ },
+ {
+  "id": "mighty_bell",
+  "name": "Mighty Bell",
+  "tier": 5,
+  "sprite": "/sprites/trinket/mighty_bell.png",
+  "description": "Monsters in your shop have +200 Damage.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:40:rarity"
+ },
+ {
+  "id": "mysterious_gem",
+  "name": "Mysterious Gem",
+  "tier": 5,
+  "sprite": "/sprites/trinket/mysterious_gem.png",
+  "description": "Your monsters have +20% Damage.",
+  "isUnique": false,
+  "sources": {
+   "pool": false,
+   "events": [
+    {
+     "id": "dryad_statue",
+     "name": "Dryad Statue"
+    }
+   ],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:40:rarity"
+ },
+ {
+  "id": "research_notes",
+  "name": "Research Notes",
+  "tier": 5,
+  "sprite": "/sprites/trinket/research_notes.png",
+  "description": "Legendary monsters are much more likely to appear in your shop.",
+  "isUnique": false,
+  "sources": {
+   "pool": false,
+   "events": [
+    {
+     "id": "professor_encounter",
+     "name": "Professor Encounter"
+    }
+   ],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:40:rarity"
+ },
+ {
+  "id": "winged_crown",
+  "name": "Winged Crown",
+  "tier": 5,
+  "sprite": "/sprites/trinket/winged_crown.png",
+  "description": "Your top middle monster has +1 Multicast.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:40:rarity"
+ },
+ {
+  "id": "zenith_stone",
+  "name": "Zenith Stone",
+  "tier": 5,
+  "sprite": "/sprites/trinket/zenith_stone.png",
+  "description": "When your monsters gain stats, they gain +80% more (except Multicast).",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:40:rarity"
+ },
+ {
+  "id": "excalibur",
+  "name": "Excalibur",
+  "tier": 6,
+  "sprite": "/sprites/trinket/excalibur.png",
+  "description": "Your monsters have +350 Damage.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": {
+   "label": "Mythical",
+   "color": "#dc2844"
+  }
+ },
+ {
+  "id": "holy_grail",
+  "name": "Holy Grail",
+  "tier": 6,
+  "sprite": "/sprites/trinket/holy_grail.png",
+  "description": "On Victory\nGain $100.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:50:rarity"
+ },
+ {
+  "id": "master_crown",
+  "name": "Master Crown",
+  "tier": 6,
+  "sprite": "/sprites/trinket/master_crown.png",
+  "description": "Your top middle monster has +80% stats (except Cooldown and Multicast).",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:50:rarity"
+ },
+ {
+  "id": "mega_upgrade_disc",
+  "name": "Mega Upgrade Disc",
+  "tier": 6,
+  "sprite": "/sprites/trinket/mega_upgrade_disc.png",
+  "description": "The next monster to reach level 3 is leveled up again, then destroy this.",
+  "isUnique": false,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:50:rarity"
+ },
+ {
+  "id": "mystic_incense",
+  "name": "Mystic Incense",
+  "tier": 6,
+  "sprite": "/sprites/trinket/mystic_incense.png",
+  "description": "A Mythical monster will appear in your next shop.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:50:rarity"
+ },
+ {
+  "id": "rainbow_pearl",
+  "name": "Rainbow Pearl",
+  "tier": 6,
+  "sprite": "/sprites/trinket/rainbow_pearl.png",
+  "description": "All monsters in your shop are SHINY.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:50:rarity"
+ },
+ {
+  "id": "ultra_duplicator",
+  "name": "Ultra Duplicator",
+  "tier": 6,
+  "sprite": "/sprites/trinket/ultra_duplicator.png",
+  "description": "Whenever you get a Trinket from a gift, gain an additional copy.",
+  "isUnique": true,
+  "sources": {
+   "pool": true,
+   "events": [],
+   "trainers": []
+  },
+  "rarity": "$15:props:children:0:props:entries:50:rarity"
+ }
+]

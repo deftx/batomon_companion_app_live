@@ -1,0 +1,153 @@
+[
+ {
+  "id": "mysterious_trainer",
+  "name": "???",
+  "sprite": "/sprites/trainer/mysterious_trainer.png",
+  "description": "Gain MissingN.",
+  "sets": []
+ },
+ {
+  "id": "bug_catcher",
+  "name": "Bug Catcher",
+  "sprite": "/sprites/trainer/bug_catcher.png",
+  "description": "The first Bug monster you buy each round is free.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "pyromaniac",
+  "name": "Chef",
+  "sprite": "/sprites/trainer/pyromaniac.png",
+  "description": "Your singled-typed monsters gain Fire typing. Your Fire monsters have +2 Burn.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "chemist",
+  "name": "Chemist",
+  "sprite": "/sprites/trainer/chemist.png",
+  "description": "Your Toxic monsters have +1 Poison. When any monster levels up, increase this effect by +1 Poison.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "egg_breeder",
+  "name": "Egg Breeder",
+  "sprite": "/sprites/trainer/egg_breeder.png",
+  "description": "Gain a Purple Egg that hatches into a level 2 Super Rare monster in 5 days.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "gamer",
+  "name": "Gamer",
+  "sprite": "/sprites/trainer/gamer.png",
+  "description": "Gain a Mythical monster and $30 on day 9.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "youngster_f",
+  "name": "Lucky Girl",
+  "sprite": "/sprites/trainer/youngster_f.png",
+  "description": "SHINY monsters are more likely to appear.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "mad_scientist",
+  "name": "Mad Scientist",
+  "sprite": "/sprites/trainer/mad_scientist.png",
+  "description": "On day 7, transform monsters on your active team into random level 1 Legendary monsters.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "masked_man",
+  "name": "Masked Man",
+  "sprite": "/sprites/trainer/masked_man.png",
+  "description": "Every 4 days, choose a trainer and gain their ability.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "monster_ranger",
+  "name": "Monster Ranger",
+  "sprite": "/sprites/trainer/monster_ranger.png",
+  "description": "Start with an Uncommon monster. Get another copy of that monster every 2 days.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "musician",
+  "name": "Musician",
+  "sprite": "/sprites/trainer/musician.png",
+  "description": "If you have exactly 1 Electric monster on your team, it will have +150% Shock.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "redhead",
+  "name": "Redhead",
+  "sprite": "/sprites/trainer/redhead.png",
+  "description": "On Victory\nGive your Fire monsters +2 Burn permanently.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "lady",
+  "name": "Rich Lady",
+  "sprite": "/sprites/trainer/lady.png",
+  "description": "Gain shop rank +2 and $10.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "shopkeeper",
+  "name": "Shopkeeper",
+  "sprite": "/sprites/trainer/shopkeeper.png",
+  "description": "Your shop stocks Item 1 rarity tier higher and cost 15% less.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "swim_coach",
+  "name": "Swim Coach",
+  "sprite": "/sprites/trainer/swim_coach.png",
+  "description": "Gain a random Water monster each day.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "treasure_hunter",
+  "name": "Treasure Hunter",
+  "sprite": "/sprites/trainer/treasure_hunter.png",
+  "description": "When you get Trinket gifts, your choices are 1 rarity tier higher.",
+  "sets": [
+   "starter"
+  ]
+ },
+ {
+  "id": "youngster_m",
+  "name": "Youngster",
+  "sprite": "/sprites/trainer/youngster_m.png",
+  "description": "Gain 3 free rerolls every day.",
+  "sets": [
+   "starter"
+  ]
+ }
+]

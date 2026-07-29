@@ -1,0 +1,152 @@
+{
+  "generatedAt": "2026-07-24T12:05:56.947Z",
+  "source": "runs-raw.json (Master-Ranked corpus) — sim replay vs day-average enemy",
+  "method": "100-draw Monte-Carlo winProb per board, identical path to the Battle Brain (via app.js export hook)",
+  "enemyMode": "profile",
+  "runs": 535,
+  "n": 3860,
+  "skipped": 0,
+  "brier": 0.4679,
+  "ece": 0.4569,
+  "meanPred": 0.4419,
+  "meanActual": 0.6301,
+  "auc": 0.522,
+  "meanPredWon": 0.4569,
+  "meanPredLost": 0.4165,
+  "canCalibrate": false,
+  "verdict": "Board barely predicts round outcome (AUC≈0.5): ranked matchmaking pairs similar-strength boards and the actual opponent is NOT in the corpus, so the recorded board explains almost none of the win/loss. The corpus CANNOT calibrate the sim — do NOT derive a live prior from this. Self-calibration must stay on the player's OWN battles, which carry the real outcome. This file is a regression/sanity canary only.",
+  "bins": [
+    {
+      "lo": 0,
+      "hi": 10,
+      "n": 1862,
+      "pred": 0.0035,
+      "actual": 0.6187
+    },
+    {
+      "lo": 10,
+      "hi": 20,
+      "n": 110,
+      "pred": 0.1232,
+      "actual": 0.5636
+    },
+    {
+      "lo": 20,
+      "hi": 30,
+      "n": 67,
+      "pred": 0.2194,
+      "actual": 0.5672
+    },
+    {
+      "lo": 30,
+      "hi": 40,
+      "n": 67,
+      "pred": 0.3187,
+      "actual": 0.5821
+    },
+    {
+      "lo": 40,
+      "hi": 50,
+      "n": 43,
+      "pred": 0.4186,
+      "actual": 0.5349
+    },
+    {
+      "lo": 50,
+      "hi": 60,
+      "n": 40,
+      "pred": 0.525,
+      "actual": 0.65
+    },
+    {
+      "lo": 60,
+      "hi": 70,
+      "n": 49,
+      "pred": 0.6214,
+      "actual": 0.5306
+    },
+    {
+      "lo": 70,
+      "hi": 80,
+      "n": 64,
+      "pred": 0.7219,
+      "actual": 0.6875
+    },
+    {
+      "lo": 80,
+      "hi": 90,
+      "n": 71,
+      "pred": 0.831,
+      "actual": 0.5634
+    },
+    {
+      "lo": 90,
+      "hi": 100,
+      "n": 1487,
+      "pred": 0.992,
+      "actual": 0.6604
+    }
+  ],
+  "byDay": {
+    "1": {
+      "n": 276,
+      "bias": -0.0422
+    },
+    "2": {
+      "n": 275,
+      "bias": -0.0595
+    },
+    "3": {
+      "n": 276,
+      "bias": -0.0371
+    },
+    "4": {
+      "n": 278,
+      "bias": -0.05
+    },
+    "5": {
+      "n": 278,
+      "bias": -0.0745
+    },
+    "6": {
+      "n": 282,
+      "bias": -0.1592
+    },
+    "7": {
+      "n": 282,
+      "bias": -0.1647
+    },
+    "8": {
+      "n": 285,
+      "bias": -0.2784
+    },
+    "9": {
+      "n": 297,
+      "bias": -0.2448
+    },
+    "10": {
+      "n": 290,
+      "bias": -0.29
+    },
+    "11": {
+      "n": 273,
+      "bias": -0.289
+    },
+    "12": {
+      "n": 252,
+      "bias": -0.2954
+    },
+    "13": {
+      "n": 231,
+      "bias": -0.2699
+    },
+    "14": {
+      "n": 178,
+      "bias": -0.2289
+    },
+    "15": {
+      "n": 107,
+      "bias": -0.6481
+    }
+  }
+}

@@ -1,0 +1,31 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Node (future-proofing — the app is currently dependency-free)
+node_modules/
+npm-debug.log*
+.env
+.env.local
+
+# Temp / logs
+*.log
+*.tmp
+*.TMP
+*~
+
+# Creative asset workspace — upscaled sprites for artwork, NOT needed to run the app
+art/
+
+# Local dev scratch
+scratchpad/
+
+# The player's live game save is read from the Godot userdata dir, never copied here —
+# but ignore it defensively in case someone drops one in the project root.
+run_save.json

@@ -1,0 +1,430 @@
+[
+ {
+  "id": "basic_bait",
+  "name": "Basic Bait",
+  "tier": 1,
+  "cost": 0,
+  "sprite": "/sprites/item/basic_bait.png",
+  "description": "Lower the shop rank.",
+  "uniquePerRound": false,
+  "rarity": {
+   "label": "Common",
+   "color": "#70707a"
+  }
+ },
+ {
+  "id": "cake",
+  "name": "Cake",
+  "tier": 1,
+  "cost": 0,
+  "sprite": "/sprites/item/cake.png",
+  "description": "Give 2 random monsters +5 Damage.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "coupon",
+  "name": "Coupon",
+  "tier": 1,
+  "cost": 0,
+  "sprite": "/sprites/item/coupon.png",
+  "description": "Reduce the cost of monsters in your shop by 5.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "fake_coin",
+  "name": "Fake Coin",
+  "tier": 1,
+  "cost": 0,
+  "sprite": "/sprites/item/fake_coin.png",
+  "description": "Gain 1 free reroll.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "gray_chip",
+  "name": "Gray Chip",
+  "tier": 1,
+  "cost": 0,
+  "sprite": "/sprites/item/gray_chip.png",
+  "description": "If you win the next battle, gain $5.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "green_stone",
+  "name": "Green Stone",
+  "tier": 1,
+  "cost": 0,
+  "sprite": "/sprites/item/green_stone.png",
+  "description": "Transform a random Common monster into a Uncommon monster.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "voucher",
+  "name": "Voucher",
+  "tier": 1,
+  "cost": 5,
+  "sprite": "/sprites/item/voucher.png",
+  "description": "Get a random monster from the current shop.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:0:rarity"
+ },
+ {
+  "id": "apex_bait",
+  "name": "Apex Bait",
+  "tier": 2,
+  "cost": 20,
+  "sprite": "/sprites/item/apex_bait.png",
+  "description": "Rank up the shop.",
+  "uniquePerRound": false,
+  "rarity": {
+   "label": "Uncommon",
+   "color": "#4ab500"
+  }
+ },
+ {
+  "id": "dowsing_rod",
+  "name": "Dowsing Rod",
+  "tier": 2,
+  "cost": 15,
+  "sprite": "/sprites/item/dowsing_rod.png",
+  "description": "Choose a Common Trinket gift.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:7:rarity"
+ },
+ {
+  "id": "feast",
+  "name": "Feast",
+  "tier": 2,
+  "cost": 0,
+  "sprite": "/sprites/item/feast.png",
+  "description": "Give your monsters +5 Damage.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:7:rarity"
+ },
+ {
+  "id": "gray_ticket",
+  "name": "Gray Ticket",
+  "tier": 2,
+  "cost": 0,
+  "sprite": "/sprites/item/gray_ticket.png",
+  "description": "Reroll a shop with all Common monsters.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:7:rarity"
+ },
+ {
+  "id": "green_ticket",
+  "name": "Green Ticket",
+  "tier": 2,
+  "cost": 0,
+  "sprite": "/sprites/item/green_ticket.png",
+  "description": "Reroll a shop with all Uncommon monsters.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:7:rarity"
+ },
+ {
+  "id": "nana_berry",
+  "name": "Nana Berry",
+  "tier": 2,
+  "cost": 1,
+  "sprite": "/sprites/item/nana_berry.png",
+  "description": "Give the bottom right monster +5% Cooldown Speed. You can use 1 more item(s) today.",
+  "uniquePerRound": true,
+  "rarity": "$15:props:children:0:props:entries:7:rarity"
+ },
+ {
+  "id": "pom berry",
+  "name": "Pom Berry",
+  "tier": 2,
+  "cost": 1,
+  "sprite": "/sprites/item/pom berry.png",
+  "description": "Give the bottom right monster +8 Damage. You can use 1 more item(s) today.",
+  "uniquePerRound": true,
+  "rarity": "$15:props:children:0:props:entries:7:rarity"
+ },
+ {
+  "id": "red_coin",
+  "name": "Red Coin",
+  "tier": 2,
+  "cost": 0,
+  "sprite": "/sprites/item/red_coin.png",
+  "description": "+$20 and lose 1 life.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:7:rarity"
+ },
+ {
+  "id": "basic_candy",
+  "name": "Basic Candy",
+  "tier": 3,
+  "cost": 30,
+  "sprite": "/sprites/item/basic_candy.png",
+  "description": "Level up a random level 1 Common or Uncommon monster.",
+  "uniquePerRound": false,
+  "rarity": {
+   "label": "Rare",
+   "color": "#0084bd"
+  }
+ },
+ {
+  "id": "battery_pack",
+  "name": "Battery Pack",
+  "tier": 3,
+  "cost": 0,
+  "sprite": "/sprites/item/battery_pack.png",
+  "description": "Give your Electric monsters +1 Shock.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:15:rarity"
+ },
+ {
+  "id": "black_sludge",
+  "name": "Black Sludge",
+  "tier": 3,
+  "cost": 0,
+  "sprite": "/sprites/item/black_sludge.png",
+  "description": "Give your Toxic monsters +1 Poison.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:15:rarity"
+ },
+ {
+  "id": "blue_ticket",
+  "name": "Blue Ticket",
+  "tier": 3,
+  "cost": 0,
+  "sprite": "/sprites/item/blue_ticket.png",
+  "description": "Reroll a shop with all Rare monsters.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:15:rarity"
+ },
+ {
+  "id": "gold_powder",
+  "name": "Gold Powder",
+  "tier": 3,
+  "cost": 5,
+  "sprite": "/sprites/item/gold_powder.png",
+  "description": "Give a random monster +20 Sell Value.",
+  "uniquePerRound": true,
+  "rarity": "$15:props:children:0:props:entries:15:rarity"
+ },
+ {
+  "id": "hot_pepper",
+  "name": "Hot Pepper",
+  "tier": 3,
+  "cost": 0,
+  "sprite": "/sprites/item/hot_pepper.png",
+  "description": "Give your Fire monsters +1 Burn.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:15:rarity"
+ },
+ {
+  "id": "lucky_coin",
+  "name": "Lucky Coin",
+  "tier": 3,
+  "cost": 0,
+  "sprite": "/sprites/item/lucky_coin.png",
+  "description": "Gain $3. You can use 1 more item(s) today.",
+  "uniquePerRound": true,
+  "rarity": "$15:props:children:0:props:entries:15:rarity"
+ },
+ {
+  "id": "magic_mirror",
+  "name": "Magic Mirror",
+  "tier": 3,
+  "cost": 120,
+  "sprite": "/sprites/item/magic_mirror.png",
+  "description": "Gain a plain copy of a random level 3 monster.",
+  "uniquePerRound": true,
+  "rarity": "$15:props:children:0:props:entries:15:rarity"
+ },
+ {
+  "id": "mystic_pearl",
+  "name": "Mystic Pearl",
+  "tier": 3,
+  "cost": 0,
+  "sprite": "/sprites/item/mystic_pearl.png",
+  "description": "Give your Water monsters +10 Heal.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:15:rarity"
+ },
+ {
+  "id": "shiny_pebble",
+  "name": "Shiny Pebble",
+  "tier": 3,
+  "cost": 0,
+  "sprite": "/sprites/item/shiny_pebble.png",
+  "description": "Give your Rock monsters +20 Shield.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:15:rarity"
+ },
+ {
+  "id": "coffee",
+  "name": "Coffee",
+  "tier": 4,
+  "cost": 5,
+  "sprite": "/sprites/item/coffee.png",
+  "description": "At the start of the next battle, Batomon On Battle Start abilities activate an additional time.",
+  "uniquePerRound": false,
+  "rarity": {
+   "label": "Super Rare",
+   "color": "#a040a0"
+  }
+ },
+ {
+  "id": "focus_pill",
+  "name": "Focus Pill",
+  "tier": 4,
+  "cost": 0,
+  "sprite": "/sprites/item/focus_pill.png",
+  "description": "Your monsters with no abilities gain +15% Cooldown Speed.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:25:rarity"
+ },
+ {
+  "id": "lootbox",
+  "name": "Lootbox",
+  "tier": 4,
+  "cost": 30,
+  "sprite": "/sprites/item/lootbox.png",
+  "description": "Get a random Legendary monster.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:25:rarity"
+ },
+ {
+  "id": "purple_gift",
+  "name": "Purple Gift",
+  "tier": 4,
+  "cost": 40,
+  "sprite": "/sprites/item/purple_gift.png",
+  "description": "Gain a random Super Rare Trinket.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:25:rarity"
+ },
+ {
+  "id": "purple_ticket",
+  "name": "Purple Ticket",
+  "tier": 4,
+  "cost": 0,
+  "sprite": "/sprites/item/purple_ticket.png",
+  "description": "Reroll a shop with all Super Rare monsters.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:25:rarity"
+ },
+ {
+  "id": "recruiting_flyer",
+  "name": "Recruiting Flyer",
+  "tier": 4,
+  "cost": 90,
+  "sprite": "/sprites/item/recruiting_flyer.png",
+  "description": "Get a random level 3 Uncommon monster.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:25:rarity"
+ },
+ {
+  "id": "tote_bag",
+  "name": "Tote Bag",
+  "tier": 4,
+  "cost": 5,
+  "sprite": "/sprites/item/tote_bag.png",
+  "description": "You can use 2 more item(s) today.",
+  "uniquePerRound": true,
+  "rarity": "$15:props:children:0:props:entries:25:rarity"
+ },
+ {
+  "id": "golden_gift",
+  "name": "Golden Gift",
+  "tier": 5,
+  "cost": 50,
+  "sprite": "/sprites/item/golden_gift.png",
+  "description": "Gain a random Legendary Trinket.",
+  "uniquePerRound": false,
+  "rarity": {
+   "label": "Legendary",
+   "color": "#d47c00"
+  }
+ },
+ {
+  "id": "golden_ticket",
+  "name": "Golden Ticket",
+  "tier": 5,
+  "cost": 0,
+  "sprite": "/sprites/item/golden_ticket.png",
+  "description": "Reroll a shop with all Legendary monsters.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:32:rarity"
+ },
+ {
+  "id": "magic_lasso",
+  "name": "Magic Lasso",
+  "tier": 5,
+  "cost": 50,
+  "sprite": "/sprites/item/magic_lasso.png",
+  "description": "Gain an exact copy of the enemy's top middle Batomon in the next battle.",
+  "uniquePerRound": true,
+  "rarity": "$15:props:children:0:props:entries:32:rarity"
+ },
+ {
+  "id": "rare_candy",
+  "name": "Rare Candy",
+  "tier": 5,
+  "cost": 40,
+  "sprite": "/sprites/item/rare_candy.png",
+  "description": "Level up a random level 1 monster.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:32:rarity"
+ },
+ {
+  "id": "black_feather",
+  "name": "Black Feather",
+  "tier": 6,
+  "cost": 30,
+  "sprite": "/sprites/item/black_feather.png",
+  "description": "Give 1 random monsters +1 Multicast.",
+  "uniquePerRound": false,
+  "rarity": {
+   "label": "Mythical",
+   "color": "#dc2844"
+  }
+ },
+ {
+  "id": "crimson_gift",
+  "name": "Crimson Gift",
+  "tier": 6,
+  "cost": 70,
+  "sprite": "/sprites/item/crimson_gift.png",
+  "description": "Gain a random Mythical Trinket.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:36:rarity"
+ },
+ {
+  "id": "crimson_ticket",
+  "name": "Crimson Ticket",
+  "tier": 6,
+  "cost": 50,
+  "sprite": "/sprites/item/crimson_ticket.png",
+  "description": "Reroll a shop with all Mythical monsters.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:36:rarity"
+ },
+ {
+  "id": "shiny_berry",
+  "name": "Shiny Berry",
+  "tier": 6,
+  "cost": 1,
+  "sprite": "/sprites/item/shiny_berry.png",
+  "description": "Turn a random monster SHINY. You can use 1 more item(s) today.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:36:rarity"
+ },
+ {
+  "id": "ultra_candy",
+  "name": "Ultra Candy",
+  "tier": 6,
+  "cost": 60,
+  "sprite": "/sprites/item/ultra_candy.png",
+  "description": "Level up a random level 3 monster.",
+  "uniquePerRound": false,
+  "rarity": "$15:props:children:0:props:entries:36:rarity"
+ }
+]

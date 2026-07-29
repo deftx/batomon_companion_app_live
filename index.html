@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Batomon Companion — Shop Advisor & Meta</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="sprites/monster/bumblebolt.png">
+</head>
+<body>
+<header>
+  <img src="sprites/monster/dragonarch.png" class="sprite" width="40" height="40" alt="">
+  <div>
+    <h1>Batomon <span>Companion</span></h1>
+    <div class="sub">Live Batodex data · Master Ranked win rates · patch 0.8.4 era</div>
+  </div>
+  <button id="shot-btn" class="ghost" style="margin-left:auto" title="Screenshot this view → PNG in your Downloads. First click asks to share a tab — pick THIS tab; after that it's one click per shot, on any page.">📸 Screenshot</button>
+  <button id="coffee-btn" class="coffee-btn" title="Support the project — it means the world">☕ Buy me a coffee</button>
+  <span id="coffee-soon" class="soon-badge" style="display:none">soon</span>
+</header>
+<div id="layout">
+<nav id="nav">
+  <button data-tab="profile">📈 Profile</button>
+  <div class="nav-gap"></div>
+  <button data-tab="live" class="active">🎮 Live Run</button>
+  <button data-tab="advisor">🛒 Shop Advisor</button>
+  <button data-tab="synergy">⚡ Live Synergies</button>
+  <button data-tab="trinkets">💎 Trinket Picker</button>
+  <button data-tab="days">📅 Day-by-Day</button>
+  <button data-tab="builds">📐 Builds &amp; Tiers</button>
+  <button data-tab="dex">📖 Batodex</button>
+  <div class="nav-gap"></div>
+  <button data-tab="news">🩹 Patches</button>
+  <button data-tab="community">📡 Community</button>
+  <div class="nav-gap"></div>
+  <button data-tab="feedback">💬 Feedback</button>
+  <div class="nav-gap"></div>
+  <button data-tab="who">🙋 Who am I</button>
+</nav>
+<main>
+  <section id="tab-live" class="tab active"></section>
+  <section id="tab-profile" class="tab"></section>
+  <section id="tab-advisor" class="tab"></section>
+  <section id="tab-synergy" class="tab"></section>
+  <section id="tab-trinkets" class="tab"></section>
+  <section id="tab-news" class="tab"></section>
+  <section id="tab-days" class="tab"></section>
+  <section id="tab-builds" class="tab"></section>
+  <section id="tab-dex" class="tab"></section>
+  <section id="tab-community" class="tab"></section>
+  <section id="tab-who" class="tab"></section>
+  <section id="tab-feedback" class="tab"></section>
+  <footer id="foot"></footer>
+</main>
+</div>
+<div class="modal-bg" id="modal-bg"><div class="modal" id="modal"></div></div>
+<script src="data.js"></script>
+<script src="guide.js"></script>
+<script src="engine.js"></script>
+<script src="exemplars.js"></script>
+<script src="community.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+[
+ {
+  "id": "bug_collector",
+  "name": "Bug Collector",
+  "tier": 1,
+  "sprite": "/sprites/event/bug_collector.png",
+  "description": "You run into a bug collector. He offers to share with you one of the bugs he has caught today.",
+  "options": [
+   {
+    "flavor": "Take the fighter ant",
+    "reward": "Gain a level 2 Guardiant"
+   },
+   {
+    "flavor": "Take the gold beetle",
+    "reward": "Gain a Gildshell with +20 Damage"
+   },
+   {
+    "flavor": "Take the boxing mantis",
+    "reward": "Gain a Brawlmantis with +1 Multicast"
+   }
+  ],
+  "rarity": {
+   "label": "Day 3",
+   "color": "#70707a"
+  }
+ },
+ {
+  "id": "dragons_nest",
+  "name": "Dragons Nest",
+  "tier": 1,
+  "sprite": "/sprites/event/dragons_nest.png",
+  "description": "You stumble upon a dragon's hoard. Take something before the dragon comes back!",
+  "options": [
+   {
+    "flavor": "Take the egg",
+    "reward": "Gain a Dragon Egg"
+   },
+   {
+    "flavor": "Take the sword",
+    "reward": "Gain Hero's Sword"
+   },
+   {
+    "flavor": "Take the coins",
+    "reward": "Gain $20"
+   }
+  ],
+  "rarity": {
+   "label": "Day 3",
+   "color": "#70707a"
+  }
+ },
+ {
+  "id": "rainbow_berry",
+  "name": "Rainbow Berry",
+  "tier": 1,
+  "sprite": "/sprites/event/rainbow_berry.png",
+  "description": "As you wade through the forest, you stumble upon a berry bush. In the bush is a peculiar rainbow berry.",
+  "options": [
+   {
+    "flavor": "Feed it to a monster",
+    "reward": "Turn a monster SHINY"
+   },
+   {
+    "flavor": "Take it",
+    "reward": "Gain Rainbow Berry"
+   },
+   {
+    "flavor": "Sell it at the market",
+    "reward": "Gain $20"
+   }
+  ],
+  "rarity": {
+   "label": "Day 3",
+   "color": "#70707a"
+  }
+ },
+ {
+  "id": "baby_basilisk",
+  "name": "Baby Basilisk",
+  "tier": 2,
+  "sprite": "/sprites/event/baby_basilisk.png",
+  "description": "In the middle of a forest, you come across a crying baby basilisk monster. It seems it has gotten lost from its parents.",
+  "options": [
+   {
+    "flavor": "Adopt it",
+    "reward": "Gain a Ignit"
+   },
+   {
+    "flavor": "Help it find its parents",
+    "reward": "Get a Rare trinket gift"
+   },
+   {
+    "flavor": "Capture it and sell it",
+    "reward": "Gain $40"
+   }
+  ],
+  "rarity": {
+   "label": "Day 6",
+   "color": "#4ab500"
+  }
+ },
+ {
+  "id": "meteor_crash",
+  "name": "Meteor Crash",
+  "tier": 2,
+  "sprite": "/sprites/event/meteor_crash.png",
+  "description": "You see a meteor fly through the sky and then crash nearby. You rush over to see the meteor with a glowing gem embed in it.",
+  "options": [
+   {
+    "flavor": "Touch the glowing gem",
+    "reward": "Level up a level 1 monster"
+   },
+   {
+    "flavor": "Mine the meteor",
+    "reward": "Gain Meteorite"
+   },
+   {
+    "flavor": "Take some meteor debris and sell it",
+    "reward": "Gain $40"
+   }
+  ],
+  "rarity": {
+   "label": "Day 6",
+   "color": "#4ab500"
+  }
+ },
+ {
+  "id": "pond_fairy",
+  "name": "Pond Fairy",
+  "tier": 2,
+  "sprite": "/sprites/event/pond_fairy.png",
+  "description": "As you stroll through the forest, a blue fairy monster emerges from a nearby pond. The fairy says it will grant you a wish.",
+  "options": [
+   {
+    "flavor": "Wish for fame",
+    "reward": "Increase shop rank by 2"
+   },
+   {
+    "flavor": "Wish for wealth",
+    "reward": "Gain Gold Bar"
+   },
+   {
+    "flavor": "Capture the fairy",
+    "reward": "Gain a Wishwash"
+   }
+  ],
+  "rarity": {
+   "label": "Day 6",
+   "color": "#4ab500"
+  }
+ },
+ {
+  "id": "dragon_tamer",
+  "name": "Dragon Tamer",
+  "tier": 3,
+  "sprite": "/sprites/event/dragon_tamer.png",
+  "description": "You run into a traveling dragon tamer. He says he has too many dragons to take care of and offers you to adopt one.",
+  "options": [
+   {
+    "flavor": "Adopt the one with the big horn",
+    "reward": "Gain a SHINY Saberhorn"
+   },
+   {
+    "flavor": "Adopt the one with the crown",
+    "reward": "Gain a SHINY Draconarch"
+   },
+   {
+    "flavor": "Adopt the long one",
+    "reward": "Gain a SHINY Onsetra"
+   }
+  ],
+  "rarity": {
+   "label": "Day 9",
+   "color": "#0084bd"
+  }
+ },
+ {
+  "id": "dryad_statue",
+  "name": "Dryad Statue",
+  "tier": 3,
+  "sprite": "/sprites/event/dryad_statue.png",
+  "description": "You explore deep into the woods and find a statue with a glowing gem embedded in its head.",
+  "options": [
+   {
+    "flavor": "Pray to it",
+    "reward": "Give a monster Grass typing, Gain a Dryadell"
+   },
+   {
+    "flavor": "Take the gem",
+    "reward": "Gain Mysterious Gem"
+   },
+   {
+    "flavor": "Gently touch it",
+    "reward": "Gain Dryad's Charm"
+   }
+  ],
+  "rarity": {
+   "label": "Day 9",
+   "color": "#0084bd"
+  }
+ },
+ {
+  "id": "genius_inventor",
+  "name": "Genius Inventor",
+  "tier": 3,
+  "sprite": "/sprites/event/genius_inventor.png",
+  "description": "You encounter a genius inventor. He asks if you want to test any of his new inventions.",
+  "options": [
+   {
+    "flavor": "Test the Recombobulator",
+    "reward": null
+   },
+   {
+    "flavor": "Test the Shockify Ray",
+    "reward": "Give a monster Electric typing and +5 Shock"
+   },
+   {
+    "flavor": "Test the Gold-o-matic",
+    "reward": "Gain Gold-o-matic"
+   }
+  ],
+  "rarity": {
+   "label": "Day 9",
+   "color": "#0084bd"
+  }
+ },
+ {
+  "id": "professor_encounter",
+  "name": "Professor Encounter",
+  "tier": 3,
+  "sprite": "/sprites/event/professor_encounter.png",
+  "description": "You run into a monster professor who's out doing research. He asks if there is anything you need help with?",
+  "options": [
+   {
+    "flavor": "Get advice on monster training",
+    "reward": "Level up a monster (max level 4)"
+   },
+   {
+    "flavor": "Ask about his research",
+    "reward": "Gain Research Notes"
+   },
+   {
+    "flavor": "Get investment advice",
+    "reward": "Gain $60"
+   }
+  ],
+  "rarity": {
+   "label": "Day 9",
+   "color": "#0084bd"
+  }
+ },
+ {
+  "id": "endless_boss_prep",
+  "name": "Endless Boss Prep",
+  "tier": 4,
+  "sprite": "/sprites/event/endless_boss_prep.png",
+  "description": "You've finally made it this far. You might need one of these for the final battle",
+  "options": [
+   {
+    "flavor": "Take the dragon",
+    "reward": "Gain a level 2 SHINY Celestia"
+   },
+   {
+    "flavor": "Take the statue",
+    "reward": "Gain a level 4 SHINY Cherubble"
+   },
+   {
+    "flavor": "Take the charm",
+    "reward": "Gain Mysterious Charm"
+   }
+  ],
+  "rarity": {
+   "label": "Other",
+   "color": "#a040a0"
+  }
+ },
+ {
+  "id": "second_chance",
+  "name": "Second Chance",
+  "tier": 4,
+  "sprite": "/sprites/event/second_chance.png",
+  "description": "A mysterious trainer approaches. She says, \"Don't give up now. You have potential. Take this.\"",
+  "options": [
+   {
+    "flavor": "Accept a life and a trinket",
+    "reward": "Get a Super Rare trinket gift"
+   },
+   {
+    "flavor": "Accept a life and a monster",
+    "reward": "Gain a random level 2 Super Rare monster"
+   },
+   {
+    "flavor": "Accept a life and a charm",
+    "reward": "Gain Mysterious Charm"
+   }
+  ],
+  "rarity": {
+   "label": "Other",
+   "color": "#a040a0"
+  }
+ }
+]

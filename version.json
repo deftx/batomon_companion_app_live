@@ -1,0 +1,7 @@
+{
+  "version": "2.0.0",
+  "minSupported": "2.0.0",
+  "releaseUrl": "https://github.com/deftx/batomon_companion_app_live/releases/latest",
+  "downloadUrl": "https://github.com/deftx/batomon_companion_app_live/archive/refs/heads/main.zip",
+  "notes": "Profile v2 (rank-progression chart, per-trainer table, career tiles, auto-tags), multi-strategy plays with a which-to-chase brain, enemy archetypes."
+}
