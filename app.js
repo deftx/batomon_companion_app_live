@@ -2370,9 +2370,12 @@
     runs.forEach(r => { const t = r.trainerName || r.trainer || '?'; (byT[t] = byT[t] || { n: 0, b: 0, c: 0 }); byT[t].n++; byT[t].b += r.badges || 0; byT[t].c += r.result === 'won' ? 1 : 0; });
     const trs = Object.entries(byT).map(([t, v]) => ({ t, avg: v.b / v.n, c: v.c, n: v.n })).sort((a, b) => b.avg - a.avg);
     if (trs.length >= 2) out.push(`🧑 <b>Best trainer</b>: <b>${esc(trs[0].t)}</b> (avg ${trs[0].avg.toFixed(1)} 🏅${trs[0].c ? `, ${trs[0].c}× champion` : ''} over ${trs[0].n} run${trs[0].n > 1 ? 's' : ''}) — your weakest is <b>${esc(trs[trs.length - 1].t)}</b> (avg ${trs[trs.length - 1].avg.toFixed(1)}).`);
-    // where runs die
-    const deaths = runs.filter(r => r.result === 'lost' || r.result === 'ended').map(r => r.day).filter(d => d > 0);
-    if (deaths.length >= 2) { const avg = deaths.reduce((a, b) => a + b, 0) / deaths.length; out.push(`💀 Your runs most often end around <b>day ${Math.round(avg)}</b> — aim to have your engine online and your board leveled before then.`); }
+    // Where runs actually go WRONG. This used to average every non-champion run,
+    // so a 9-badge night (a +4★ result) counted as a "death" and dragged the
+    // number toward days that were fine. Only runs that graded a loss or tie —
+    // the ones with something to fix — belong in this average.
+    const deaths = runs.filter(r => (r.result === 'lost' || r.result === 'ended') && (r.badges || 0) <= 5).map(r => r.day).filter(d => d > 0);
+    if (deaths.length >= 2) { const avg = deaths.reduce((a, b) => a + b, 0) / deaths.length; out.push(`💀 Your <b>bad</b> runs (5🏅 or under) collapse around <b>day ${Math.round(avg)}</b> — aim to have your engine online and your board leveled before then. Runs that reached 6🏅+ aren't counted here; those went fine.`); }
     // strategy commitment impact
     const wS = runs.filter(r => r.strategy), noS = runs.filter(r => !r.strategy);
     if (wS.length >= 2 && noS.length >= 1) { const a = wS.reduce((x, r) => x + (r.badges || 0), 0) / wS.length, b = noS.reduce((x, r) => x + (r.badges || 0), 0) / noS.length; if (a - b >= 1) out.push(`♟️ Runs where you <b>adopt a strategy</b> reach <b>+${(a - b).toFixed(1)}</b> more badges on average — commit to a plan earlier.`); }
