@@ -2132,7 +2132,10 @@
     const buys = runs.flatMap(r => (r.runLog || []).filter(l => l.type === 'decision' && /🛒/.test(l.detail)));
     const followed = buys.filter(l => /✓ top pick|✓ meilleur choix/.test(l.detail)).length;
     // tier (our own honest ladder — anchors shown in the tooltip)
-    const tier = champs >= 3 ? { t: 'GRANDMASTER', c: 'var(--gold)', why: '3+ championship runs' }
+    // CAREER summary from local runs — NOT a game rank. "Grandmaster" used to sit
+    // here, which invented a tier above Master (the real ceiling) and read like a
+    // ladder rank right next to the actual one. State the achievement instead.
+    const tier = champs >= 3 ? { t: `${champs}× CHAMPION`, c: 'var(--gold)', why: `${champs} runs finished at 10 badges` }
       : champs >= 1 ? { t: 'CHAMPION', c: 'var(--gold)', why: 'won a championship run (10 badges)' }
       : bestBadges >= 7 ? { t: 'CONTENDER', c: 'var(--accent)', why: 'best run reached 7+ badges' }
       : bestBadges >= 4 ? { t: 'CHALLENGER', c: 'var(--green)', why: 'best run reached 4+ badges' }
@@ -2151,7 +2154,7 @@
           ${mainTr && mainTr.sprite ? `<img class="sprite" src="${spr(mainTr.sprite)}" style="width:64px;height:64px">` : '<div style="font-size:44px">🎮</div>'}
           <div>
             <div style="font-size:16px;font-weight:800">${esc(mainT ? mainT[1].name : 'Player')} <span style="font-size:10.5px;color:var(--muted);font-weight:400">main</span></div>
-            <div style="margin-top:4px"><b title="${esc(tier.why)}" style="color:${tier.c};font-size:13px;letter-spacing:1px">${tier.t}</b></div>
+            <div style="margin-top:4px" title="${esc(tier.why)} — a career summary from your archived runs, not the in-game ladder (that's the 🎖 Ranked card)."><b style="color:${tier.c};font-size:13px;letter-spacing:1px">${tier.t}</b> <span style="font-size:9px;color:var(--muted);letter-spacing:0">career</span></div>
             <div style="margin-top:6px;font-size:11px;color:var(--muted)">Form: ${form}</div>
           </div>
         </div>
@@ -2263,7 +2266,7 @@
       ${recentSummaryHTML(runs)}
       ${trainerTableHTML(runs)}
       ${mostFieldedHTML(runs)}
-      <div class="note" style="margin:-2px 0 12px;font-size:10px">Tier anchors: CHAMPION = a 10-badge run · CONTENDER = 7+ · CHALLENGER = 4+ · GRANDMASTER = 3 championships. Population-relative ranking arrives with community data at v1.</div>
+      <div class="note" style="margin:-2px 0 12px;font-size:10px">The <b>career</b> label above summarises your archived runs — it is <b>not</b> an in-game rank (Batomon's ladder tops out at Master, shown in the 🎖 Ranked card). Anchors: <b>N× CHAMPION</b> = that many 10-badge runs · <b>CHAMPION</b> = one · <b>CONTENDER</b> = best run reached 7+ 🏅 · <b>CHALLENGER</b> = 4+ · <b>ROOKIE</b> = below that. Population-relative ranking arrives with community data at v1.</div>
       <div id="ph-history"></div>`;
     renderHistory($('#ph-history')); // 🏆 match history lives inside the profile (Mobalytics pattern)
     wireRankChart(root, traj); // 📈 hover tooltips on the rank-progression points
