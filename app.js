@@ -1271,6 +1271,15 @@
   if (!Array.isArray(live.shopItems)) live.shopItems = [];
   if (!Array.isArray(live.bench)) live.bench = [];
   while (live.bench.length < 4) live.bench.push(null); // in-game bench = 4 slots
+  // board/shop/trinkets were NOT normalised here, yet the code below calls
+  // live.trinkets.filter(...) directly — so a saved state missing any of them
+  // (older backup, partial write) threw during boot and left the ENTIRE app
+  // blank with only a console error. Normalise every array the render path
+  // assumes exists.
+  if (!Array.isArray(live.trinkets)) live.trinkets = [];
+  if (!Array.isArray(live.shop)) live.shop = [];
+  if (!Array.isArray(live.board)) live.board = [];
+  while (live.board.length < 6) live.board.push(null); // board = 6 slots
   if (live.shopRank == null) live.shopRank = Math.min(live.day, 14);
   if (!live.hpBaseByDay) live.hpBaseByDay = {};
   if (!(live.hp > 0)) live.hp = 300;
@@ -1491,21 +1500,37 @@
   //   climb: Gold 6 → Gold 5 → … → Gold 1 → Platinum. Model = 8 divs/tier.
   const DIVS_PER_TIER = 8;
   const rankStarDelta = (badges) => Math.max(-5, Math.min(5, (+badges || 0) - 5));
+  // ---- MASTER IS NOT A STAR TIER ----------------------------------------
+  // Every tier below Master is divisions + stars. Master is a RATING ladder:
+  // no divisions, no stars — you hold a rating number and a global placement
+  // (#120), and each ranked run moves the rating instead of stars. Modelling
+  // it like the others invented ranks that don't exist ("MASTER 8") and a
+  // star PROMOTION inside a tier that has none. Master therefore occupies a
+  // SINGLE ladder index — the top — and its real position lives in the
+  // rating/placement fields, not in div/stars.
+  const MASTER_TI = RANK_TIERS.length - 1;
+  const MASTER_IDX = MASTER_TI * DIVS_PER_TIER * 5;      // one flat slot at the top
+  const isMaster = (r) => !!r && String(r.tier || '').toLowerCase() === 'master';
   // Flatten {tier,div,stars} to a single monotonic ladder index so promotion /
   // demotion is plain integer math (higher index = higher rank). Stars rest 0–4.
   function rankToIndex(r) {
+    if (isMaster(r)) return MASTER_IDX;
     const ti = Math.max(0, RANK_TIERS.findIndex(t => t.id.toLowerCase() === String(r.tier || '').toLowerCase()));
     const div = Math.min(Math.max(+r.div || 1, 1), DIVS_PER_TIER);
     const stars = Math.min(Math.max(+r.stars || 0, 0), 4);
     return ti * DIVS_PER_TIER * 5 + (DIVS_PER_TIER - div) * 5 + stars; // div counts DOWN
   }
   function indexToRank(idx) {
-    const MAXI = RANK_TIERS.length * DIVS_PER_TIER * 5 - 1;
+    const MAXI = MASTER_IDX; // Master is the ceiling and is a single slot
     const clamped = Math.max(0, Math.min(MAXI, Math.round(idx)));
+    if (clamped >= MASTER_IDX) {
+      const T = RANK_TIERS[MASTER_TI];
+      return { tier: T.id, master: true, div: null, stars: null, icon: T.icon, c: T.c, atFloor: false, atCeil: true };
+    }
     const ti = Math.floor(clamped / (DIVS_PER_TIER * 5));
     const within = clamped - ti * DIVS_PER_TIER * 5;
     const T = RANK_TIERS[ti];
-    return { tier: T.id, div: DIVS_PER_TIER - Math.floor(within / 5), stars: within % 5, icon: T.icon, c: T.c, atFloor: clamped <= 0, atCeil: clamped >= MAXI };
+    return { tier: T.id, div: DIVS_PER_TIER - Math.floor(within / 5), stars: within % 5, icon: T.icon, c: T.c, atFloor: clamped <= 0, atCeil: false };
   }
   const projectRank = (rank, delta) => (rank && rank.tier) ? indexToRank(rankToIndex(rank) + delta) : null;
   // A division holds 0–4★; the 5th PROMOTES (div counts DOWN, div 1 → next tier). The
@@ -1513,15 +1538,25 @@
   // a saved 5★ into the promotion it represents, keeping the ranked card and rank chart
   // in agreement (they both derive from the stored {tier,div,stars}).
   function normalizeRankStars(r) {
+    if (isMaster(r)) return Object.assign({}, r, { div: null, stars: null }); // no divisions/stars at Master
     let tier = r.tier, div = Math.min(Math.max(+r.div || 1, 1), DIVS_PER_TIER), stars = Math.min(Math.max(+r.stars || 0, 0), 5);
     if (stars >= 5) {
       stars = 0;
       if (div > 1) div -= 1;
-      else { const ti = RANK_TIERS.findIndex(t => t.id.toLowerCase() === String(tier).toLowerCase()); if (ti >= 0 && ti < RANK_TIERS.length - 1) { tier = RANK_TIERS[ti + 1].id; div = DIVS_PER_TIER; } }
+      else { const ti = RANK_TIERS.findIndex(t => t.id.toLowerCase() === String(tier).toLowerCase()); if (ti >= 0 && ti < RANK_TIERS.length - 1) { tier = RANK_TIERS[ti + 1].id; div = (ti + 1 === MASTER_TI) ? null : DIVS_PER_TIER; } }
     }
     return Object.assign({}, r, { tier, div, stars });
   }
-  const rankStr = (r) => r ? `${String(r.tier).toUpperCase()} ${r.div}${r.stars ? ` ${r.stars}★` : ''}` : '—';
+  // Master prints as MASTER · #placement · rating — never a division or stars.
+  const rankStr = (r) => {
+    if (!r) return '—';
+    if (isMaster(r)) {
+      const place = r.place ? ` #${r.place}` : '';
+      const rating = r.rating ? ` · ${(+r.rating).toLocaleString()}` : '';
+      return `MASTER${place}${rating}`;
+    }
+    return `${String(r.tier).toUpperCase()} ${r.div}${r.stars ? ` ${r.stars}★` : ''}`;
+  };
   // Live ranked projection — what THIS run's badge count does to your ladder.
   // Blends the exact star-delta rule with your saved rank baseline (bc_rankmanual).
   // opts.final = run is over (wording + optional ✓ Apply button); opts.runSig
@@ -1532,6 +1567,19 @@
     const deltaTxt = delta === 0 ? 'No Change' : `${delta > 0 ? '+' : ''}${delta}★`;
     const dColor = delta > 0 ? 'var(--green)' : delta < 0 ? 'var(--red)' : 'var(--muted)';
     let manual = null; try { manual = JSON.parse(localStorage.getItem('bc_rankmanual') || 'null'); } catch (e) {}
+    // At MASTER the star rule stops applying entirely — runs move a RATING and a
+    // global placement instead. The exact points-per-run formula isn't published,
+    // so don't invent one: report the badges, show the rating on file, and let the
+    // observed deltas be recorded run by run (same approach as the learned MMR bands).
+    if (isMaster(manual)) {
+      const rate = manual.rating ? `<b>${(+manual.rating).toLocaleString()}</b> rating` : '<span style="color:var(--muted)">rating not set</span>';
+      const place = manual.place ? ` · <b>#${manual.place}</b>` : '';
+      return `<div class="reroll-note" style="border-color:${RANK_TIERS[MASTER_TI].c};margin-top:${opts.final ? 4 : 10}px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:12px">
+        <b style="color:${RANK_TIERS[MASTER_TI].c}">👑 Master</b>
+        <span>${opts.final ? 'final' : 'if you stop now'} at <b>${badges}</b>🏅</span>
+        <span style="color:var(--muted)">${rate}${place} — at Master a run moves your <b>rating</b>, not stars. Update it in <b>Profile → 🎖</b> after the result screen.</span>
+      </div>`;
+    }
     let last = null; try { last = JSON.parse(localStorage.getItem('bc_rankLastApplied') || 'null'); } catch (e) {}
     // Once THIS run's delta is applied, bc_rankmanual IS the post-run rank — show
     // the STORED transition (pre→post), NEVER re-project off the updated baseline
@@ -1570,6 +1618,9 @@
     if (last && last.runSig === runSig) return null; // this run's delta already applied
     let manual = null; try { manual = JSON.parse(localStorage.getItem('bc_rankmanual') || 'null'); } catch (e) {}
     if (!manual || !manual.tier) return null;
+    // Already at Master? Stars don't exist there — a run moves rating/placement,
+    // which only the game reports. Never silently rewrite a Master rank.
+    if (isMaster(manual)) return null;
     const from = { tier: manual.tier, div: manual.div, stars: manual.stars };
     const delta = rankStarDelta(badges);
     const to = projectRank(from, delta);
@@ -2143,8 +2194,11 @@
             body = `<div style="display:flex;gap:12px;align-items:center">
                 <div style="font-size:34px;filter:drop-shadow(0 0 8px ${T ? T.c : 'var(--gold)'}44)">${T ? T.icon : '🎖'}</div>
                 <div>
-                  <div style="font-size:21px;font-weight:800;letter-spacing:1px;color:${T ? T.c : 'var(--gold)'}">${esc(String(manual.tier).toUpperCase())} ${manual.div || ''}</div>
-                  <div style="letter-spacing:3px;margin-top:1px">${starRow(manual.stars || 0, false)}</div>
+                  <div style="font-size:21px;font-weight:800;letter-spacing:1px;color:${T ? T.c : 'var(--gold)'}">${esc(String(manual.tier).toUpperCase())}${isMaster(manual) ? (manual.place ? ` <span style="font-size:17px">#${manual.place}</span>` : '') : ` ${manual.div || ''}`}</div>
+                  ${isMaster(manual)
+                    ? `<div style="font-size:12.5px;margin-top:2px;color:var(--text)">${manual.rating ? `<b>${(+manual.rating).toLocaleString()}</b> <span style="color:var(--muted)">rating</span>` : '<span style="color:var(--muted)">rating not set — ✎ update</span>'}</div>
+                       <div class="note" style="margin:2px 0 0;font-size:9.5px">No stars at Master — runs move your rating and global placement.</div>`
+                    : `<div style="letter-spacing:3px;margin-top:1px">${starRow(manual.stars || 0, false)}</div>`}
                   ${mmrLine}
                 </div>
               </div>
@@ -2159,10 +2213,18 @@
               <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
                 <label style="display:flex;flex-direction:column;gap:3px;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Tier
                   <select id="pr-tier" style="min-width:104px">${RANK_TIERS.map(t => `<option value="${t.id}"${cur && String(cur.tier).toLowerCase() === t.id.toLowerCase() ? ' selected' : ''}>${t.icon} ${t.id}</option>`).join('')}</select></label>
-                <label style="display:flex;flex-direction:column;gap:3px;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Division
-                  <select id="pr-div" style="width:60px">${[1, 2, 3, 4, 5, 6, 7, 8].map(n => `<option${cur && +cur.div === n ? ' selected' : ''}>${n}</option>`).join('')}</select></label>
-                <label style="display:flex;flex-direction:column;gap:3px;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Stars
-                  <span id="pr-starpick" data-v="${cur ? (cur.stars || 0) : 0}" style="letter-spacing:2px">${starRow(cur ? (cur.stars || 0) : 0, true)}</span></label>
+                <span id="pr-starfields" style="display:${isMaster(cur) ? 'none' : 'contents'}">
+                  <label style="display:flex;flex-direction:column;gap:3px;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Division
+                    <select id="pr-div" style="width:60px">${[1, 2, 3, 4, 5, 6, 7, 8].map(n => `<option${cur && +cur.div === n ? ' selected' : ''}>${n}</option>`).join('')}</select></label>
+                  <label style="display:flex;flex-direction:column;gap:3px;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Stars
+                    <span id="pr-starpick" data-v="${cur ? (cur.stars || 0) : 0}" style="letter-spacing:2px">${starRow(cur ? (cur.stars || 0) : 0, true)}</span></label>
+                </span>
+                <span id="pr-masterfields" style="display:${isMaster(cur) ? 'contents' : 'none'}">
+                  <label style="display:flex;flex-direction:column;gap:3px;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Rating
+                    <input id="pr-rating" type="number" placeholder="e.g. 1081" value="${cur && cur.rating ? cur.rating : ''}" style="width:100px"></label>
+                  <label style="display:flex;flex-direction:column;gap:3px;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Placement #
+                    <input id="pr-place" type="number" placeholder="e.g. 4160" value="${cur && cur.place ? cur.place : ''}" style="width:100px"></label>
+                </span>
                 <label style="display:flex;flex-direction:column;gap:3px;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">MMR (if shown)
                   <input id="pr-mmr" type="number" placeholder="auto-estimated" value="${cur && cur.mmr ? cur.mmr : ''}" style="width:110px"></label>
                 <button class="primary" id="pr-rank-save" style="font-size:12px;padding:7px 16px">Save</button>${cur ? '<button class="ghost" id="pr-rank-cancel" style="font-size:12px;padding:7px 14px">Cancel</button>' : ''}
@@ -2171,7 +2233,11 @@
           }
           const rankedTag = live.isRanked ? ' <span class="chip good" style="font-size:9px;vertical-align:middle" title="Detected live from the run save (is_ranked). Your tier/stars stay in the game\'s encrypted save, so keep them set below.">🏅 RANKED — detected</span>' : '';
           const rankedNudge = (live.isRanked && !(manual && manual.tier) && !auto) ? `<div class="note" style="color:var(--gold);margin:0 0 8px;font-size:10.5px">🏅 You're in a <b>ranked run</b> — set your current rank so the app tracks it (the game keeps tier/stars encrypted, so it's manual).</div>` : '';
-          const starRule = `<div class="note" style="margin-top:9px;font-size:9.5px;line-height:1.5">★ <b>Ladder rule</b>: a ranked run moves you <b>badges − 5</b> stars — 0🏅 −5★ · 5🏅 No Change · 10🏅 +5★. Five stars = one division; divisions count <b>down</b> (Gold 6 → Gold 5 → … → Gold 1 → Platinum). The 🎖 banner on a finished ranked run applies it in one click.</div>`;
+          // The star rule only applies BELOW Master. Showing it on a Master card
+          // contradicts the "no stars at Master" line right above it.
+          const starRule = isMaster(manual)
+            ? `<div class="note" style="margin-top:9px;font-size:9.5px;line-height:1.5">👑 <b>Master ladder</b>: stars stop here. Each ranked run moves a <b>rating</b> up or down, and your <b>#placement</b> is where that rating puts you against every other Master player. The game shows both on the result screen — put them in with <b>✎ update</b> and the app tracks them.</div>`
+            : `<div class="note" style="margin-top:9px;font-size:9.5px;line-height:1.5">★ <b>Ladder rule</b>: a ranked run moves you <b>badges − 5</b> stars — 0🏅 −5★ · 5🏅 No Change · 10🏅 +5★. Five stars = one division; divisions count <b>down</b> (Gold 6 → Gold 5 → … → Gold 1 → Platinum). Reaching the top of Diamond promotes you to <b>Master</b>, where stars are replaced by rating. The 🎖 banner on a finished ranked run applies it in one click.</div>`;
           return `<div class="card" style="padding:14px 18px;min-width:230px"><h3 style="margin:0 0 8px">🎖 Ranked${rankedTag}</h3>${rankedNudge}${body}${(manual && manual.tier) || auto ? starRule : ''}</div>`;
         })()}
         <div class="card" style="display:flex;gap:10px;align-items:center;padding:10px 16px">
@@ -2201,10 +2267,28 @@
       starPick.dataset.v = v;
       starPick.querySelectorAll('.pr-star').forEach(x => x.style.color = +x.dataset.s <= v ? 'var(--gold)' : '#3a3a44');
     });
+    // Master has no divisions/stars — swap the inputs live when the tier changes.
+    const tierSel = $('#pr-tier');
+    if (tierSel) tierSel.onchange = () => {
+      const m = String(tierSel.value).toLowerCase() === 'master';
+      const sf = $('#pr-starfields'), mf = $('#pr-masterfields');
+      if (sf) sf.style.display = m ? 'none' : 'contents';
+      if (mf) mf.style.display = m ? 'contents' : 'none';
+    };
     const rkSave = $('#pr-rank-save');
     if (rkSave) rkSave.onclick = () => {
-      const norm = normalizeRankStars({ tier: $('#pr-tier').value, div: +$('#pr-div').value || 1, stars: +($('#pr-starpick').dataset.v) || 0 }); // 5★ → promotion
-      localStorage.setItem('bc_rankmanual', JSON.stringify({ tier: norm.tier, div: norm.div, stars: norm.stars, mmr: +$('#pr-mmr').value || null, at: Date.now() }));
+      const tier = $('#pr-tier').value;
+      const rec = { tier, mmr: +$('#pr-mmr').value || null, at: Date.now() };
+      if (String(tier).toLowerCase() === 'master') {
+        // rating + placement, never div/stars
+        rec.div = null; rec.stars = null;
+        rec.rating = +($('#pr-rating') || {}).value || null;
+        rec.place = +($('#pr-place') || {}).value || null;
+      } else {
+        const norm = normalizeRankStars({ tier, div: +$('#pr-div').value || 1, stars: +($('#pr-starpick').dataset.v) || 0 }); // 5★ → promotion
+        rec.tier = norm.tier; rec.div = norm.div; rec.stars = norm.stars;
+      }
+      localStorage.setItem('bc_rankmanual', JSON.stringify(rec));
       rankEditing = false; renderProfile();
     };
     // ✎ update → open the pre-filled form WITHOUT wiping the saved rank (the old

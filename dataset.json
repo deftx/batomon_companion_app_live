@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-29T02:16:19.230Z",
+ "generatedAt": "2026-08-05T11:04:11.777Z",
  "source": "batodex.com (live Master Ranked stats + full database)",
  "monsters": [
   {
@@ -14313,8 +14313,8 @@
    ],
    "stats": {
     "name": "Bug Catcher",
-    "winRate": 57.8,
-    "pickRate": 4.1,
+    "winRate": 57.6,
+    "pickRate": 4.2,
     "picks": null
    }
   },
@@ -14328,8 +14328,8 @@
    ],
    "stats": {
     "name": "Chef",
-    "winRate": 56,
-    "pickRate": 5.6,
+    "winRate": 55.7,
+    "pickRate": 5.8,
     "picks": null
    }
   },
@@ -14343,7 +14343,7 @@
    ],
    "stats": {
     "name": "Chemist",
-    "winRate": 53.1,
+    "winRate": 52.8,
     "pickRate": 4.3,
     "picks": null
    }
@@ -14358,7 +14358,7 @@
    ],
    "stats": {
     "name": "Egg Breeder",
-    "winRate": 52.8,
+    "winRate": 52.6,
     "pickRate": 6,
     "picks": null
    }
@@ -14373,8 +14373,8 @@
    ],
    "stats": {
     "name": "Gamer",
-    "winRate": 47.4,
-    "pickRate": 5.4,
+    "winRate": 47.1,
+    "pickRate": 5.2,
     "picks": null
    }
   },
@@ -14388,7 +14388,7 @@
    ],
    "stats": {
     "name": "Lucky Girl",
-    "winRate": 51.7,
+    "winRate": 51.4,
     "pickRate": 10.3,
     "picks": null
    }
@@ -14404,7 +14404,7 @@
    "stats": {
     "name": "Mad Scientist",
     "winRate": 51.4,
-    "pickRate": 2.7,
+    "pickRate": 2.6,
     "picks": null
    }
   },
@@ -14418,8 +14418,8 @@
    ],
    "stats": {
     "name": "Masked Man",
-    "winRate": 50.1,
-    "pickRate": 5.6,
+    "winRate": 49.9,
+    "pickRate": 5.4,
     "picks": null
    }
   },
@@ -14433,7 +14433,7 @@
    ],
    "stats": {
     "name": "Monster Ranger",
-    "winRate": 60,
+    "winRate": 59.8,
     "pickRate": 12.4,
     "picks": null
    }
@@ -14448,7 +14448,7 @@
    ],
    "stats": {
     "name": "Musician",
-    "winRate": 53.6,
+    "winRate": 53.3,
     "pickRate": 4.5,
     "picks": null
    }
@@ -14463,8 +14463,8 @@
    ],
    "stats": {
     "name": "Redhead",
-    "winRate": 52.8,
-    "pickRate": 3.8,
+    "winRate": 52.3,
+    "pickRate": 3.7,
     "picks": null
    }
   },
@@ -14478,8 +14478,8 @@
    ],
    "stats": {
     "name": "Rich Lady",
-    "winRate": 52.3,
-    "pickRate": 5.7,
+    "winRate": 52.2,
+    "pickRate": 5.8,
     "picks": null
    }
   },
@@ -14493,8 +14493,8 @@
    ],
    "stats": {
     "name": "Shopkeeper",
-    "winRate": 46.8,
-    "pickRate": 7.8,
+    "winRate": 46.7,
+    "pickRate": 7.5,
     "picks": null
    }
   },
@@ -14509,7 +14509,7 @@
    "stats": {
     "name": "Swim Coach",
     "winRate": 56.2,
-    "pickRate": 8.7,
+    "pickRate": 8.9,
     "picks": null
    }
   },
@@ -14523,8 +14523,8 @@
    ],
    "stats": {
     "name": "Treasure Hunter",
-    "winRate": 51.1,
-    "pickRate": 7.5,
+    "winRate": 50.9,
+    "pickRate": 7.3,
     "picks": null
    }
   },
@@ -14538,8 +14538,8 @@
    ],
    "stats": {
     "name": "Youngster",
-    "winRate": 52.4,
-    "pickRate": 5.7,
+    "winRate": 52.1,
+    "pickRate": 5.9,
     "picks": null
    }
   }
@@ -14563,8 +14563,8 @@
    },
    "stats": {
     "name": "Gold Nugget",
-    "winRate": 53.1,
-    "pickRate": 16.2,
+    "winRate": 53,
+    "pickRate": 16.1,
     "picks": null
    }
   },
@@ -14586,8 +14586,8 @@
    },
    "stats": {
     "name": "Gold Trophy",
-    "winRate": 54.2,
-    "pickRate": 21.9,
+    "winRate": 54,
+    "pickRate": 21.8,
     "picks": null
    }
   },
@@ -14609,7 +14609,7 @@
    },
    "stats": {
     "name": "Mini Duplicator",
-    "winRate": 51.1,
+    "winRate": 51,
     "pickRate": 3.3,
     "picks": null
    }
@@ -14632,8 +14632,8 @@
    },
    "stats": {
     "name": "Power Pouch",
-    "winRate": 53.5,
-    "pickRate": 13.4,
+    "winRate": 53.3,
+    "pickRate": 13.5,
     "picks": null
    }
   },
@@ -14655,8 +14655,8 @@
    },
    "stats": {
     "name": "Quick Bell",
-    "winRate": 53.3,
-    "pickRate": 21.9,
+    "winRate": 53,
+    "pickRate": 22,
     "picks": null
    }
   },
@@ -14683,7 +14683,7 @@
    },
    "stats": {
     "name": "Rainbow Berry",
-    "winRate": 55,
+    "winRate": 54.7,
     "pickRate": 2.3,
     "picks": null
    }
@@ -14706,7 +14706,7 @@
    },
    "stats": {
     "name": "Training Weights",
-    "winRate": 52.7,
+    "winRate": 52.6,
     "pickRate": 4.3,
     "picks": null
    }
@@ -14729,7 +14729,7 @@
    },
    "stats": {
     "name": "Treasure Map",
-    "winRate": 51.1,
+    "winRate": 50.8,
     "pickRate": 3.3,
     "picks": null
    }
@@ -14752,7 +14752,7 @@
    },
    "stats": {
     "name": "Wood Sword",
-    "winRate": 53.2,
+    "winRate": 53,
     "pickRate": 13.4,
     "picks": null
    }
@@ -14775,8 +14775,8 @@
    },
    "stats": {
     "name": "Bug Net",
-    "winRate": 52.2,
-    "pickRate": 7.3,
+    "winRate": 51.8,
+    "pickRate": 7.2,
     "picks": null
    }
   },
@@ -14798,7 +14798,7 @@
    },
    "stats": {
     "name": "Fire Orb",
-    "winRate": 53.4,
+    "winRate": 53,
     "pickRate": 7.1,
     "picks": null
    }
@@ -14821,8 +14821,8 @@
    },
    "stats": {
     "name": "Market License",
-    "winRate": 56.3,
-    "pickRate": 19.9,
+    "winRate": 56.2,
+    "pickRate": 20,
     "picks": null
    }
   },
@@ -14844,7 +14844,7 @@
    },
    "stats": {
     "name": "Membership Card",
-    "winRate": 55.5,
+    "winRate": 55.3,
     "pickRate": 20.5,
     "picks": null
    }
@@ -14867,7 +14867,7 @@
    },
    "stats": {
     "name": "Piggy Bank",
-    "winRate": 55.5,
+    "winRate": 55.3,
     "pickRate": 11.4,
     "picks": null
    }
@@ -14890,7 +14890,7 @@
    },
    "stats": {
     "name": "Poison Orb",
-    "winRate": 53.7,
+    "winRate": 53.4,
     "pickRate": 7,
     "picks": null
    }
@@ -14913,8 +14913,8 @@
    },
    "stats": {
     "name": "Power Band",
-    "winRate": 53.2,
-    "pickRate": 9.4,
+    "winRate": 53.1,
+    "pickRate": 9.5,
     "picks": null
    }
   },
@@ -14936,8 +14936,8 @@
    },
    "stats": {
     "name": "Power Crown",
-    "winRate": 53.5,
-    "pickRate": 17.2,
+    "winRate": 53.3,
+    "pickRate": 17.4,
     "picks": null
    }
   },
@@ -14959,8 +14959,8 @@
    },
    "stats": {
     "name": "Ancient Plume",
-    "winRate": 45.1,
-    "pickRate": 3.7,
+    "winRate": 45.4,
+    "pickRate": 3.8,
     "picks": null
    }
   },
@@ -14987,8 +14987,8 @@
    },
    "stats": {
     "name": "Gold Bar",
-    "winRate": 52,
-    "pickRate": 13.2,
+    "winRate": 51.9,
+    "pickRate": 13.1,
     "picks": null
    }
   },
@@ -15015,8 +15015,8 @@
    },
    "stats": {
     "name": "Hero's Sword",
-    "winRate": 52.9,
-    "pickRate": 12.1,
+    "winRate": 52.8,
+    "pickRate": 11.9,
     "picks": null
    }
   },
@@ -15039,7 +15039,7 @@
    "stats": {
     "name": "Link Cable",
     "winRate": 54.1,
-    "pickRate": 17.9,
+    "pickRate": 18,
     "picks": null
    }
   },
@@ -15061,8 +15061,8 @@
    },
    "stats": {
     "name": "Mega Duplicator",
-    "winRate": 51.1,
-    "pickRate": 3.6,
+    "winRate": 50.9,
+    "pickRate": 3.7,
     "picks": null
    }
   },
@@ -15089,8 +15089,8 @@
    },
    "stats": {
     "name": "Meteorite",
-    "winRate": 54.3,
-    "pickRate": 2.6,
+    "winRate": 54,
+    "pickRate": 2.5,
     "picks": null
    }
   },
@@ -15112,8 +15112,8 @@
    },
    "stats": {
     "name": "Power Bell",
-    "winRate": 52.6,
-    "pickRate": 1.9,
+    "winRate": 52.4,
+    "pickRate": 1.8,
     "picks": null
    }
   },
@@ -15135,7 +15135,7 @@
    },
    "stats": {
     "name": "Sapphire Amulet",
-    "winRate": 56.6,
+    "winRate": 56.7,
     "pickRate": 3.6,
     "picks": null
    }
@@ -15158,7 +15158,7 @@
    },
    "stats": {
     "name": "Silver Watch",
-    "winRate": 54.7,
+    "winRate": 54.5,
     "pickRate": 9.9,
     "picks": null
    }
@@ -15181,7 +15181,7 @@
    },
    "stats": {
     "name": "Speed Crest",
-    "winRate": 54.8,
+    "winRate": 54.5,
     "pickRate": 14.4,
     "picks": null
    }
@@ -15204,7 +15204,7 @@
    },
    "stats": {
     "name": "Terrarium",
-    "winRate": 54.4,
+    "winRate": 54,
     "pickRate": 3.2,
     "picks": null
    }
@@ -15227,8 +15227,8 @@
    },
    "stats": {
     "name": "Topaz Amulet",
-    "winRate": 59,
-    "pickRate": 4.2,
+    "winRate": 58.9,
+    "pickRate": 4.3,
     "picks": null
    }
   },
@@ -15250,7 +15250,7 @@
    },
    "stats": {
     "name": "Warhorn",
-    "winRate": 53.6,
+    "winRate": 53.4,
     "pickRate": 9.7,
     "picks": null
    }
@@ -15273,7 +15273,7 @@
    },
    "stats": {
     "name": "Blitz Bell",
-    "winRate": 58.5,
+    "winRate": 58.2,
     "pickRate": 8.9,
     "picks": null
    }
@@ -15296,8 +15296,8 @@
    },
    "stats": {
     "name": "Echo Bell",
-    "winRate": 61.6,
-    "pickRate": 6,
+    "winRate": 61.4,
+    "pickRate": 5.9,
     "picks": null
    }
   },
@@ -15319,8 +15319,8 @@
    },
    "stats": {
     "name": "Haste Crown",
-    "winRate": 57.4,
-    "pickRate": 14.6,
+    "winRate": 57.2,
+    "pickRate": 14.8,
     "picks": null
    }
   },
@@ -15342,8 +15342,8 @@
    },
    "stats": {
     "name": "Haste Orb",
-    "winRate": 59.2,
-    "pickRate": 19.3,
+    "winRate": 59.1,
+    "pickRate": 19.5,
     "picks": null
    }
   },
@@ -15374,7 +15374,7 @@
    },
    "stats": {
     "name": "Mysterious Charm",
-    "winRate": 52.7,
+    "winRate": 52.8,
     "pickRate": 6,
     "picks": null
    }
@@ -15402,8 +15402,8 @@
    },
    "stats": {
     "name": "Mysterious Mask",
-    "winRate": 55,
-    "pickRate": 23.9,
+    "winRate": 54.9,
+    "pickRate": 23.6,
     "picks": null
    }
   },
@@ -15425,7 +15425,7 @@
    },
    "stats": {
     "name": "Razor Beak",
-    "winRate": 55.1,
+    "winRate": 54.6,
     "pickRate": 5.3,
     "picks": null
    }
@@ -15448,8 +15448,8 @@
    },
    "stats": {
     "name": "Repeater Charm",
-    "winRate": 61.3,
-    "pickRate": 11.3,
+    "winRate": 61,
+    "pickRate": 11.4,
     "picks": null
    }
   },
@@ -15471,8 +15471,8 @@
    },
    "stats": {
     "name": "Upgrade Disc",
-    "winRate": 56.3,
-    "pickRate": 1.8,
+    "winRate": 56,
+    "pickRate": 1.9,
     "picks": null
    }
   },
@@ -15494,7 +15494,7 @@
    },
    "stats": {
     "name": "VIP Pass",
-    "winRate": 56.6,
+    "winRate": 56.8,
     "pickRate": 2.9,
     "picks": null
    }
@@ -15517,7 +15517,7 @@
    },
    "stats": {
     "name": "Barbell",
-    "winRate": 64.3,
+    "winRate": 64.1,
     "pickRate": 8.8,
     "picks": null
    }
@@ -15545,8 +15545,8 @@
    },
    "stats": {
     "name": "Dryad's Charm",
-    "winRate": 50.5,
-    "pickRate": 11.7,
+    "winRate": 50.2,
+    "pickRate": 11.8,
     "picks": null
    }
   },
@@ -15568,8 +15568,8 @@
    },
    "stats": {
     "name": "Fancy Sword",
-    "winRate": 66.1,
-    "pickRate": 8.4,
+    "winRate": 66,
+    "pickRate": 8.3,
     "picks": null
    }
   },
@@ -15596,8 +15596,8 @@
    },
    "stats": {
     "name": "Gold-o-matic",
-    "winRate": 57,
-    "pickRate": 11.3,
+    "winRate": 56.9,
+    "pickRate": 11.5,
     "picks": null
    }
   },
@@ -15619,7 +15619,7 @@
    },
    "stats": {
     "name": "Metronome",
-    "winRate": 65.7,
+    "winRate": 65.5,
     "pickRate": 12.1,
     "picks": null
    }
@@ -15642,8 +15642,8 @@
    },
    "stats": {
     "name": "Mighty Bell",
-    "winRate": 63.6,
-    "pickRate": 7.2,
+    "winRate": 63.3,
+    "pickRate": 7.1,
     "picks": null
    }
   },
@@ -15670,7 +15670,7 @@
    },
    "stats": {
     "name": "Mysterious Gem",
-    "winRate": 51.3,
+    "winRate": 51.2,
     "pickRate": 7.6,
     "picks": null
    }
@@ -15698,8 +15698,8 @@
    },
    "stats": {
     "name": "Research Notes",
-    "winRate": 49.6,
-    "pickRate": 1.7,
+    "winRate": 49.7,
+    "pickRate": 1.6,
     "picks": null
    }
   },
@@ -15721,8 +15721,8 @@
    },
    "stats": {
     "name": "Winged Crown",
-    "winRate": 66.4,
-    "pickRate": 17.4,
+    "winRate": 66.2,
+    "pickRate": 17.5,
     "picks": null
    }
   },
@@ -15744,7 +15744,7 @@
    },
    "stats": {
     "name": "Zenith Stone",
-    "winRate": 68.3,
+    "winRate": 68.1,
     "pickRate": 13.8,
     "picks": null
    }
@@ -15767,8 +15767,8 @@
    },
    "stats": {
     "name": "Excalibur",
-    "winRate": 74.9,
-    "pickRate": 20.7,
+    "winRate": 74.7,
+    "pickRate": 20.9,
     "picks": null
    }
   },
@@ -15790,8 +15790,8 @@
    },
    "stats": {
     "name": "Holy Grail",
-    "winRate": 72.6,
-    "pickRate": 15.6,
+    "winRate": 72.4,
+    "pickRate": 15.5,
     "picks": null
    }
   },
@@ -15813,8 +15813,8 @@
    },
    "stats": {
     "name": "Master Crown",
-    "winRate": 74.1,
-    "pickRate": 19,
+    "winRate": 74,
+    "pickRate": 19.1,
     "picks": null
    }
   },
@@ -15836,7 +15836,7 @@
    },
    "stats": {
     "name": "Mega Upgrade Disc",
-    "winRate": 68.1,
+    "winRate": 67.7,
     "pickRate": 10.9,
     "picks": null
    }
@@ -15859,7 +15859,7 @@
    },
    "stats": {
     "name": "Mystic Incense",
-    "winRate": 60.3,
+    "winRate": 60.7,
     "pickRate": 1.1,
     "picks": null
    }
@@ -15882,8 +15882,8 @@
    },
    "stats": {
     "name": "Rainbow Pearl",
-    "winRate": 69.8,
-    "pickRate": 14.7,
+    "winRate": 69.6,
+    "pickRate": 14.8,
     "picks": null
    }
   },
@@ -15905,8 +15905,8 @@
    },
    "stats": {
     "name": "Ultra Duplicator",
-    "winRate": 72.1,
-    "pickRate": 18,
+    "winRate": 71.8,
+    "pickRate": 17.8,
     "picks": null
    }
   }
@@ -16751,441 +16751,441 @@
  "trainerStats": [
   {
    "name": "Monster Ranger",
-   "winRate": 60,
+   "winRate": 59.8,
    "pickRate": 12.4,
    "picks": null
   },
   {
    "name": "Bug Catcher",
-   "winRate": 57.8,
-   "pickRate": 4.1,
+   "winRate": 57.6,
+   "pickRate": 4.2,
    "picks": null
   },
   {
    "name": "Swim Coach",
    "winRate": 56.2,
-   "pickRate": 8.7,
+   "pickRate": 8.9,
    "picks": null
   },
   {
    "name": "Chef",
-   "winRate": 56,
-   "pickRate": 5.6,
+   "winRate": 55.7,
+   "pickRate": 5.8,
    "picks": null
   },
   {
    "name": "Musician",
-   "winRate": 53.6,
+   "winRate": 53.3,
    "pickRate": 4.5,
    "picks": null
   },
   {
    "name": "Chemist",
-   "winRate": 53.1,
+   "winRate": 52.8,
    "pickRate": 4.3,
    "picks": null
   },
   {
-   "name": "Redhead",
-   "winRate": 52.8,
-   "pickRate": 3.8,
-   "picks": null
-  },
-  {
    "name": "Egg Breeder",
-   "winRate": 52.8,
+   "winRate": 52.6,
    "pickRate": 6,
    "picks": null
   },
   {
-   "name": "Youngster",
-   "winRate": 52.4,
-   "pickRate": 5.7,
+   "name": "Redhead",
+   "winRate": 52.3,
+   "pickRate": 3.7,
    "picks": null
   },
   {
    "name": "Rich Lady",
-   "winRate": 52.3,
-   "pickRate": 5.7,
+   "winRate": 52.2,
+   "pickRate": 5.8,
    "picks": null
   },
   {
-   "name": "Lucky Girl",
-   "winRate": 51.7,
-   "pickRate": 10.3,
+   "name": "Youngster",
+   "winRate": 52.1,
+   "pickRate": 5.9,
    "picks": null
   },
   {
    "name": "Mad Scientist",
    "winRate": 51.4,
-   "pickRate": 2.7,
+   "pickRate": 2.6,
+   "picks": null
+  },
+  {
+   "name": "Lucky Girl",
+   "winRate": 51.4,
+   "pickRate": 10.3,
    "picks": null
   },
   {
    "name": "Treasure Hunter",
-   "winRate": 51.1,
-   "pickRate": 7.5,
+   "winRate": 50.9,
+   "pickRate": 7.3,
    "picks": null
   },
   {
    "name": "Masked Man",
-   "winRate": 50.1,
-   "pickRate": 5.6,
-   "picks": null
-  },
-  {
-   "name": "Gamer",
-   "winRate": 47.4,
+   "winRate": 49.9,
    "pickRate": 5.4,
    "picks": null
   },
   {
+   "name": "Gamer",
+   "winRate": 47.1,
+   "pickRate": 5.2,
+   "picks": null
+  },
+  {
    "name": "Shopkeeper",
-   "winRate": 46.8,
-   "pickRate": 7.8,
+   "winRate": 46.7,
+   "pickRate": 7.5,
    "picks": null
   }
  ],
  "trinketStats": [
   {
    "name": "Rainbow Berry",
-   "winRate": 55,
+   "winRate": 54.7,
    "pickRate": 2.3,
    "picks": null
   },
   {
    "name": "Gold Trophy",
-   "winRate": 54.2,
-   "pickRate": 21.9,
+   "winRate": 54,
+   "pickRate": 21.8,
    "picks": null
   },
   {
    "name": "Power Pouch",
-   "winRate": 53.5,
-   "pickRate": 13.4,
+   "winRate": 53.3,
+   "pickRate": 13.5,
    "picks": null
   },
   {
    "name": "Quick Bell",
-   "winRate": 53.3,
-   "pickRate": 21.9,
+   "winRate": 53,
+   "pickRate": 22,
    "picks": null
   },
   {
    "name": "Wood Sword",
-   "winRate": 53.2,
+   "winRate": 53,
    "pickRate": 13.4,
    "picks": null
   },
   {
    "name": "Gold Nugget",
-   "winRate": 53.1,
-   "pickRate": 16.2,
+   "winRate": 53,
+   "pickRate": 16.1,
    "picks": null
   },
   {
    "name": "Training Weights",
-   "winRate": 52.7,
+   "winRate": 52.6,
    "pickRate": 4.3,
    "picks": null
   },
   {
    "name": "Mini Duplicator",
-   "winRate": 51.1,
+   "winRate": 51,
    "pickRate": 3.3,
    "picks": null
   },
   {
    "name": "Treasure Map",
-   "winRate": 51.1,
+   "winRate": 50.8,
    "pickRate": 3.3,
    "picks": null
   },
   {
    "name": "Market License",
-   "winRate": 56.3,
-   "pickRate": 19.9,
-   "picks": null
-  },
-  {
-   "name": "Membership Card",
-   "winRate": 55.5,
-   "pickRate": 20.5,
+   "winRate": 56.2,
+   "pickRate": 20,
    "picks": null
   },
   {
    "name": "Piggy Bank",
-   "winRate": 55.5,
+   "winRate": 55.3,
    "pickRate": 11.4,
    "picks": null
   },
   {
+   "name": "Membership Card",
+   "winRate": 55.3,
+   "pickRate": 20.5,
+   "picks": null
+  },
+  {
    "name": "Poison Orb",
-   "winRate": 53.7,
+   "winRate": 53.4,
    "pickRate": 7,
    "picks": null
   },
   {
    "name": "Power Crown",
-   "winRate": 53.5,
-   "pickRate": 17.2,
-   "picks": null
-  },
-  {
-   "name": "Fire Orb",
-   "winRate": 53.4,
-   "pickRate": 7.1,
+   "winRate": 53.3,
+   "pickRate": 17.4,
    "picks": null
   },
   {
    "name": "Power Band",
-   "winRate": 53.2,
-   "pickRate": 9.4,
+   "winRate": 53.1,
+   "pickRate": 9.5,
+   "picks": null
+  },
+  {
+   "name": "Fire Orb",
+   "winRate": 53,
+   "pickRate": 7.1,
    "picks": null
   },
   {
    "name": "Bug Net",
-   "winRate": 52.2,
-   "pickRate": 7.3,
+   "winRate": 51.8,
+   "pickRate": 7.2,
    "picks": null
   },
   {
    "name": "Topaz Amulet",
-   "winRate": 59,
-   "pickRate": 4.2,
+   "winRate": 58.9,
+   "pickRate": 4.3,
    "picks": null
   },
   {
    "name": "Sapphire Amulet",
-   "winRate": 56.6,
+   "winRate": 56.7,
    "pickRate": 3.6,
    "picks": null
   },
   {
    "name": "Speed Crest",
-   "winRate": 54.8,
+   "winRate": 54.5,
    "pickRate": 14.4,
    "picks": null
   },
   {
    "name": "Silver Watch",
-   "winRate": 54.7,
+   "winRate": 54.5,
    "pickRate": 9.9,
-   "picks": null
-  },
-  {
-   "name": "Terrarium",
-   "winRate": 54.4,
-   "pickRate": 3.2,
-   "picks": null
-  },
-  {
-   "name": "Meteorite",
-   "winRate": 54.3,
-   "pickRate": 2.6,
    "picks": null
   },
   {
    "name": "Link Cable",
    "winRate": 54.1,
-   "pickRate": 17.9,
+   "pickRate": 18,
+   "picks": null
+  },
+  {
+   "name": "Terrarium",
+   "winRate": 54,
+   "pickRate": 3.2,
+   "picks": null
+  },
+  {
+   "name": "Meteorite",
+   "winRate": 54,
+   "pickRate": 2.5,
    "picks": null
   },
   {
    "name": "Warhorn",
-   "winRate": 53.6,
+   "winRate": 53.4,
    "pickRate": 9.7,
    "picks": null
   },
   {
    "name": "Hero's Sword",
-   "winRate": 52.9,
-   "pickRate": 12.1,
+   "winRate": 52.8,
+   "pickRate": 11.9,
    "picks": null
   },
   {
    "name": "Power Bell",
-   "winRate": 52.6,
-   "pickRate": 1.9,
+   "winRate": 52.4,
+   "pickRate": 1.8,
    "picks": null
   },
   {
    "name": "Gold Bar",
-   "winRate": 52,
-   "pickRate": 13.2,
+   "winRate": 51.9,
+   "pickRate": 13.1,
    "picks": null
   },
   {
    "name": "Mega Duplicator",
-   "winRate": 51.1,
-   "pickRate": 3.6,
-   "picks": null
-  },
-  {
-   "name": "Ancient Plume",
-   "winRate": 45.1,
+   "winRate": 50.9,
    "pickRate": 3.7,
    "picks": null
   },
   {
+   "name": "Ancient Plume",
+   "winRate": 45.4,
+   "pickRate": 3.8,
+   "picks": null
+  },
+  {
    "name": "Echo Bell",
-   "winRate": 61.6,
-   "pickRate": 6,
+   "winRate": 61.4,
+   "pickRate": 5.9,
    "picks": null
   },
   {
    "name": "Repeater Charm",
-   "winRate": 61.3,
-   "pickRate": 11.3,
+   "winRate": 61,
+   "pickRate": 11.4,
    "picks": null
   },
   {
    "name": "Haste Orb",
-   "winRate": 59.2,
-   "pickRate": 19.3,
+   "winRate": 59.1,
+   "pickRate": 19.5,
    "picks": null
   },
   {
    "name": "Blitz Bell",
-   "winRate": 58.5,
+   "winRate": 58.2,
    "pickRate": 8.9,
    "picks": null
   },
   {
    "name": "Haste Crown",
-   "winRate": 57.4,
-   "pickRate": 14.6,
+   "winRate": 57.2,
+   "pickRate": 14.8,
    "picks": null
   },
   {
    "name": "VIP Pass",
-   "winRate": 56.6,
+   "winRate": 56.8,
    "pickRate": 2.9,
    "picks": null
   },
   {
    "name": "Upgrade Disc",
-   "winRate": 56.3,
-   "pickRate": 1.8,
-   "picks": null
-  },
-  {
-   "name": "Razor Beak",
-   "winRate": 55.1,
-   "pickRate": 5.3,
+   "winRate": 56,
+   "pickRate": 1.9,
    "picks": null
   },
   {
    "name": "Mysterious Mask",
-   "winRate": 55,
-   "pickRate": 23.9,
+   "winRate": 54.9,
+   "pickRate": 23.6,
+   "picks": null
+  },
+  {
+   "name": "Razor Beak",
+   "winRate": 54.6,
+   "pickRate": 5.3,
    "picks": null
   },
   {
    "name": "Mysterious Charm",
-   "winRate": 52.7,
+   "winRate": 52.8,
    "pickRate": 6,
    "picks": null
   },
   {
    "name": "Zenith Stone",
-   "winRate": 68.3,
+   "winRate": 68.1,
    "pickRate": 13.8,
    "picks": null
   },
   {
    "name": "Winged Crown",
-   "winRate": 66.4,
-   "pickRate": 17.4,
+   "winRate": 66.2,
+   "pickRate": 17.5,
    "picks": null
   },
   {
    "name": "Fancy Sword",
-   "winRate": 66.1,
-   "pickRate": 8.4,
+   "winRate": 66,
+   "pickRate": 8.3,
    "picks": null
   },
   {
    "name": "Metronome",
-   "winRate": 65.7,
+   "winRate": 65.5,
    "pickRate": 12.1,
    "picks": null
   },
   {
    "name": "Barbell",
-   "winRate": 64.3,
+   "winRate": 64.1,
    "pickRate": 8.8,
    "picks": null
   },
   {
    "name": "Mighty Bell",
-   "winRate": 63.6,
-   "pickRate": 7.2,
+   "winRate": 63.3,
+   "pickRate": 7.1,
    "picks": null
   },
   {
    "name": "Gold-o-matic",
-   "winRate": 57,
-   "pickRate": 11.3,
+   "winRate": 56.9,
+   "pickRate": 11.5,
    "picks": null
   },
   {
    "name": "Mysterious Gem",
-   "winRate": 51.3,
+   "winRate": 51.2,
    "pickRate": 7.6,
    "picks": null
   },
   {
    "name": "Dryad's Charm",
-   "winRate": 50.5,
-   "pickRate": 11.7,
+   "winRate": 50.2,
+   "pickRate": 11.8,
    "picks": null
   },
   {
    "name": "Research Notes",
-   "winRate": 49.6,
-   "pickRate": 1.7,
+   "winRate": 49.7,
+   "pickRate": 1.6,
    "picks": null
   },
   {
    "name": "Excalibur",
-   "winRate": 74.9,
-   "pickRate": 20.7,
+   "winRate": 74.7,
+   "pickRate": 20.9,
    "picks": null
   },
   {
    "name": "Master Crown",
-   "winRate": 74.1,
-   "pickRate": 19,
+   "winRate": 74,
+   "pickRate": 19.1,
    "picks": null
   },
   {
    "name": "Holy Grail",
-   "winRate": 72.6,
-   "pickRate": 15.6,
+   "winRate": 72.4,
+   "pickRate": 15.5,
    "picks": null
   },
   {
    "name": "Ultra Duplicator",
-   "winRate": 72.1,
-   "pickRate": 18,
+   "winRate": 71.8,
+   "pickRate": 17.8,
    "picks": null
   },
   {
    "name": "Rainbow Pearl",
-   "winRate": 69.8,
-   "pickRate": 14.7,
+   "winRate": 69.6,
+   "pickRate": 14.8,
    "picks": null
   },
   {
    "name": "Mega Upgrade Disc",
-   "winRate": 68.1,
+   "winRate": 67.7,
    "pickRate": 10.9,
    "picks": null
   },
   {
    "name": "Mystic Incense",
-   "winRate": 60.3,
+   "winRate": 60.7,
    "pickRate": 1.1,
    "picks": null
   }
