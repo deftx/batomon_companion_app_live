@@ -1460,6 +1460,31 @@
     abandoned: { label: '↩ ABANDONED', color: 'var(--muted)', border: 'var(--border)' },
     ended: { label: '⏹ ENDED', color: 'var(--muted)', border: 'var(--border)' },
   };
+  // ---- RANKED OUTCOME GRADE -------------------------------------------------
+  // In ranked, running out of lives is NOT the result — the BADGE COUNT is, and it
+  // maps straight onto the ladder move (badges − 5). Calling an 8-badge run "DIED"
+  // buried a +3★ result under a skull. Grade ranked runs on what the ladder paid:
+  //   10 → champion (+5★) · 8–9 excellent (+3/+4) · 6–7 good (+1/+2)
+  //   5  → tie (no change) · <5 → loss (negative)
+  // Unranked runs keep the plain lived/died framing, where dying IS the story.
+  function rankedGrade(badges) {
+    const b = +badges || 0;
+    const d = rankStarDelta(b);
+    const sign = d > 0 ? `+${d}★` : d < 0 ? `${d}★` : 'no change';
+    if (b >= 10) return { key: 'champion', label: '🏆 CHAMPION', color: 'var(--gold)', border: 'rgba(240,196,64,.5)', delta: d, sign };
+    if (b >= 8) return { key: 'excellent', label: '⭐ EXCELLENT', color: 'var(--gold)', border: 'rgba(240,196,64,.38)', delta: d, sign };
+    if (b >= 6) return { key: 'good', label: '✅ GOOD', color: 'var(--green)', border: 'rgba(61,220,132,.4)', delta: d, sign };
+    if (b === 5) return { key: 'tie', label: '➖ TIE', color: 'var(--muted)', border: 'var(--border)', delta: 0, sign };
+    return { key: 'loss', label: '❌ LOSS', color: 'var(--red)', border: 'rgba(255,77,94,.4)', delta: d, sign };
+  }
+  // A run's display identity: ranked runs are graded on badges, everything else
+  // falls back to how the run physically ended.
+  // `isRanked !== false` — runs archived before the flag existed have it undefined
+  // and are graded too, so the whole history reads consistently (same convention
+  // rankTrajectory uses). Only an explicitly-unranked run keeps lived/died framing.
+  const runMeta = (run) => (run && run.isRanked !== false)
+    ? rankedGrade(run.badges)
+    : (RESULT_META[run && run.result] || RESULT_META.ended);
   const runSprites = (arr, sz) => (arr || []).map(b => { const m = monById[b.id]; return m ? `<img class="sprite" src="${spr(b.shiny && m.shinySprite ? m.shinySprite : m.sprite)}" width="${sz || 24}" height="${sz || 24}" title="${esc(m.name)} L${b.lvl}${b.shiny ? ' ✨' : ''}">` : ''; }).join('');
   // 📊 GPI-style radar for ONE run (Mobalytics pattern, anchored to fixed
   // reference points since there's no population data yet — anchors documented
@@ -1811,7 +1836,7 @@
   }
   // 📤 SHAREABLE SUMMARY CARD — hand-drawn canvas (no external libs; CSP-safe).
   function openSummaryCard(run) {
-    const rm = RESULT_META[run.result] || RESULT_META.ended;
+    const rm = runMeta(run);
     const W = 720, H = 405;
     const cv = el('canvas'); cv.width = W; cv.height = H; cv.style.cssText = 'width:100%;border-radius:12px;border:1px solid var(--border)';
     const x = cv.getContext('2d');
@@ -2007,11 +2032,18 @@
   // streaks, clean/rough signals. Cheap read of the archived run.
   function runTags(run) {
     const tags = [];
-    if (run.result === 'won') tags.push({ t: '🏆 Champion', c: 'gold' });
+    const b = run.badges || 0;
+    if (run.isRanked !== false) {
+      // Ranked: the badge count IS the result, and it carries the ladder move.
+      // Running out of lives at 8🏅 is a +3★ night, not a death.
+      const g = rankedGrade(b);
+      const c = g.key === 'champion' || g.key === 'excellent' ? 'gold' : g.key === 'good' ? 'green' : g.key === 'tie' ? 'plain' : 'red';
+      tags.push({ t: `${g.label.replace(/^\S+\s/, (m) => m)} · ${b}🏅 ${g.sign}`, c });
+    } else if (run.result === 'won') tags.push({ t: '🏆 Champion', c: 'gold' });
     else if (run.result === 'lost') tags.push({ t: `💀 Died day ${run.day}`, c: 'red' });
     else tags.push({ t: `⏹ Ended day ${run.day}`, c: 'plain' });
-    const b = run.badges || 0;
-    if (run.result !== 'won' && b >= 8) tags.push({ t: `So close · ${b}🏅`, c: 'accent' });
+    if (run.isRanked === false && run.result !== "won" && b >= 8) tags.push({ t: `So close · ${b}🏅`, c: 'accent' });
+    if (run.isRanked !== false && b === 9) tags.push({ t: 'One badge short', c: 'accent' });
     const strat = (run.strategies && run.strategies.length) ? run.strategies : (run.strategy ? [run.strategy] : []);
     strat.slice(0, 2).forEach(id => { const s = STRATEGY_LIB.find(x => x.id === id); if (s) tags.push({ t: `${s.icon} ${s.name.replace(/\s+(engine|ramp|feeder engine|CDS chain)$/i, '')}`, c: 'plain' }); });
     const hist = run.history || [];
@@ -2147,7 +2179,15 @@
     const mainTr = mainT && D.trainers.find(t => t.id === mainT[0]);
     const stat = (val, label, color) => `<div class="card" style="text-align:center;padding:12px 10px;flex:1;min-width:104px"><div style="font-size:24px;font-weight:800;color:${color || 'var(--gold)'}">${val}</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">${label}</div></div>`;
     // recent form: last 5 runs, newest first
-    const form = runs.slice(0, 5).map(r => `<span class="pill" title="${esc(r.trainerName || '?')} — day ${r.day}, ${r.wins}W-${r.losses}L" style="border-color:${r.result === 'won' ? 'rgba(240,196,64,.6)' : r.result === 'lost' ? 'rgba(255,77,94,.5)' : 'var(--border)'}">${r.result === 'won' ? '🏆' : r.result === 'lost' ? '💀' : '⏹'} ${r.badges}🏅</span>`).join(' ');
+    // Form pills follow the same grading: a ranked 8🏅 is a good night, not a skull.
+    const form = runs.slice(0, 5).map(r => {
+      const m = runMeta(r);
+      const icon = (m.label.match(/^\S+/) || ['⏹'])[0];
+      const tip = r.isRanked !== false
+        ? `${esc(r.trainerName || '?')} — ${r.badges}🏅 ${m.sign ? '(' + m.sign + ')' : ''} · day ${r.day}`
+        : `${esc(r.trainerName || '?')} — day ${r.day}, ${r.wins}W-${r.losses}L`;
+      return `<span class="pill" title="${tip}" style="border-color:${m.border}">${icon} ${r.badges}🏅</span>`;
+    }).join(' ');
     root.innerHTML = `<h2 style="margin:0 0 10px">📈 Profile <span style="font-size:12px;color:var(--muted)">— built from your ${runs.length} archived run${runs.length > 1 ? 's' : ''}, all local</span></h2>
       <div style="display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin-bottom:12px">
         <div class="card" style="display:flex;gap:14px;align-items:center;padding:16px 20px;min-width:300px;flex:1">
@@ -2449,7 +2489,7 @@
       <div class="note" style="margin:0 0 10px">${fitted && fitted.fittedOn ? `📐 sim noise fitted on ${fitted.fittedOn} battles (σ ${fitted.foe}/${fitted.own}, Brier ${fitted.brier})` : '📐 sim noise: defaults (fits itself at 3+ runs / 25+ battles)'}</div>
       ${(() => { const ins = historyInsights(runs.slice(0, 20)); return ins.length ? `<div class="card" style="border-color:rgba(123,147,195,.5);background:linear-gradient(180deg,rgba(123,147,195,.08),transparent);margin-bottom:12px"><h3>🧠 Coaching insights <span style="font-size:10px;color:var(--muted);font-weight:400">· patterns across your last ${Math.min(runs.length, 20)} run${Math.min(runs.length, 20) === 1 ? '' : 's'} — sharpen as you play more</span></h3><ul style="margin:8px 0 0;padding-left:20px;line-height:1.7;font-size:12.5px">${ins.map(i => `<li style="margin-bottom:3px">${i}</li>`).join('')}</ul></div>` : ''; })()}
       <div style="display:flex;flex-direction:column;gap:8px">
-        ${runs.map((r, i) => { const rm = RESULT_META[r.result] || RESULT_META.ended; const tags = runTags(r); return `<div class="card gh-card" data-i="${i}" style="padding:0;overflow:hidden;border-color:${rm.border}">
+        ${runs.map((r, i) => { const rm = runMeta(r); const tags = runTags(r); return `<div class="card gh-card" data-i="${i}" style="padding:0;overflow:hidden;border-color:${rm.border}">
           <div class="gh-head" style="cursor:pointer;padding:9px 14px">
             <div style="display:flex;align-items:center;gap:10px">
               <b style="color:${rm.color};min-width:100px;font-size:13px">${rm.label}</b>
@@ -2470,7 +2510,7 @@
     root.querySelectorAll('.gh-del').forEach(b => b.onclick = (e) => {
       e.stopPropagation();
       const r = runs[+b.dataset.i]; if (!r) return;
-      if (!confirm(`Delete this run from history?\n\n${(RESULT_META[r.result] || {}).label || r.result} · ${r.badges}🏅 · day ${r.day} · ${r.trainerName || ''}\n\nThis only removes the record. It cannot be undone.`)) return;
+      if (!confirm(`Delete this run from history?\n\n${runMeta(r).label} · ${r.badges}🏅 · day ${r.day} · ${r.trainerName || ''}\n\nThis only removes the record. It cannot be undone.`)) return;
       const all = loadRuns();
       const idx = r.id ? all.findIndex(x => x.id === r.id) : +b.dataset.i;
       if (idx >= 0) { all.splice(idx, 1); saveRuns(all); }
