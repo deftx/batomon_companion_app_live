@@ -1678,8 +1678,11 @@
   function runRadarSVG(run) { return radarSVGFromDims(runRadarDims(run)); }
   let _radarSeq = 0; // unique gradient id per SVG (avoids url(#id) collisions across radars)
   function radarSVGFromDims(dims, px) {
-    // wide viewBox + side-aware text anchors so labels never clip
-    const R = 44, cx = 92, cy = 72, W = 184, H = 148;
+    // The viewBox has to leave room for the LABELS, not just the polygon: a
+    // right-side label starts at cx+R+10 and a "Battles 35" runs ~50 units at
+    // font-size 10, so the old 184-wide box cut off both sides ("ommit 15",
+    // "Battle"). Box widened and radius trimmed so the longest label fits.
+    const R = 40, cx = 115, cy = 72, W = 230, H = 148;
     const size = px || 150;
     const gid = 'rg' + (_radarSeq++);
     const ang = (i) => -Math.PI / 2 + (i * 2 * Math.PI / dims.length);
@@ -1915,7 +1918,11 @@
       pts.push({ g: i + 1, idx: ci, delta: ci - prev, badges: r.badges, trainer: r.trainerName || r.trainer || '?', result: r.result, rank: indexToRank(ci) });
       prev = ci;
     });
-    return { pts, startIdx, endIdx: clampIdx(endIdx), current: indexToRank(clampIdx(endIdx)) };
+    // The ladder index alone can't express a Master rank — rating/placement live on
+    // the saved rank, so carry them onto `current` for display.
+    const nowRank = indexToRank(clampIdx(endIdx));
+    if (isMaster(nowRank) && isMaster(manual)) { nowRank.rating = manual.rating || null; nowRank.place = manual.place || null; }
+    return { pts, startIdx, endIdx: clampIdx(endIdx), current: nowRank };
   }
 
   // the LP-progression chart (Mobalytics style): area+line over games, colored points,
@@ -1957,7 +1964,7 @@
     return `<div class="card rank-chart" style="flex:1;min-width:320px;position:relative">
       <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:2px"><h3 style="margin:0">📈 Rank progression</h3>
         <span style="font-size:10px;color:var(--muted)">last ${pts.length - 1} run${pts.length - 1 === 1 ? '' : 's'} · hover a point</span>
-        <span style="margin-left:auto;font-size:12px;color:${cur.c};font-weight:700">${String(cur.tier).toUpperCase()} ${cur.div} ${cur.stars}★</span></div>
+        <span style="margin-left:auto;font-size:12px;color:${cur.c};font-weight:700">${esc(rankStr(cur))}</span></div>
       <div class="rk-plot">
         <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">
           <defs><linearGradient id="rankgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5aa2ff" stop-opacity="0.34"/><stop offset="1" stop-color="#5aa2ff" stop-opacity="0"/></linearGradient></defs>
