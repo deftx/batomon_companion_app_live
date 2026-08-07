@@ -1582,6 +1582,35 @@
     }
     return `${String(r.tier).toUpperCase()} ${r.div}${r.stars ? ` ${r.stars}★` : ''}`;
   };
+  // ---- MASTER RATING LOG ----------------------------------------------------
+  // The rating lives in the game's ENCRYPTED meta save (session.save is a GDEC
+  // container), so it can't be read the way run_save.json can — the player types
+  // it once from the result screen. Every entry records what the run scored and
+  // what the ladder paid, which is what lets the app predict the next move.
+  const loadRatingLog = () => { try { const a = JSON.parse(localStorage.getItem('bc_ratingLog') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } };
+  function recordRating(badges, rating, place) {
+    if (!(rating > 0)) return null;
+    let manual = null; try { manual = JSON.parse(localStorage.getItem('bc_rankmanual') || 'null'); } catch (e) {}
+    const prev = manual && manual.rating ? +manual.rating : null;
+    const delta = prev != null ? rating - prev : null;
+    const log = loadRatingLog();
+    log.push({ at: Date.now(), badges: +badges || 0, rating: +rating, place: +place || null, delta });
+    localStorage.setItem('bc_ratingLog', JSON.stringify(log.slice(-200)));
+    localStorage.setItem('bc_rankmanual', JSON.stringify(Object.assign({}, manual || {}, {
+      tier: 'Master', div: null, stars: null, rating: +rating, place: +place || (manual && manual.place) || null, at: Date.now(),
+    })));
+    return { delta, rating: +rating, place: +place || null };
+  }
+  // Average observed move for this badge count — exact matches first, then the
+  // nearest neighbours, so it says something useful before the log is deep.
+  function predictRatingDelta(badges) {
+    const log = loadRatingLog().filter(e => e && typeof e.delta === 'number');
+    if (!log.length) return null;
+    const exact = log.filter(e => e.badges === +badges);
+    const near = exact.length ? exact : log.filter(e => Math.abs(e.badges - +badges) <= 1);
+    if (!near.length) return null;
+    return { d: Math.round(near.reduce((a, e) => a + e.delta, 0) / near.length), n: near.length };
+  }
   // Live ranked projection — what THIS run's badge count does to your ladder.
   // Blends the exact star-delta rule with your saved rank baseline (bc_rankmanual).
   // opts.final = run is over (wording + optional ✓ Apply button); opts.runSig
@@ -1599,10 +1628,24 @@
     if (isMaster(manual)) {
       const rate = manual.rating ? `<b>${(+manual.rating).toLocaleString()}</b> rating` : '<span style="color:var(--muted)">rating not set</span>';
       const place = manual.place ? ` · <b>#${manual.place}</b>` : '';
+      const pred = predictRatingDelta(badges);
+      // Once the run is OVER, don't send the player off to another tab to record
+      // the result — the numbers are on screen in front of them right now. Take
+      // them here, in two fields, and log the observed delta so the app can start
+      // predicting the move instead of only reporting it.
+      const capture = opts.final ? `
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;width:100%;margin-top:6px">
+          <span style="font-size:10.5px;color:var(--muted)">From the result screen:</span>
+          <input class="mr-rating" type="number" placeholder="rating" value="" style="width:86px;font-size:11px">
+          <input class="mr-place" type="number" placeholder="#place" value="" style="width:86px;font-size:11px">
+          <button class="primary mr-save" data-badges="${badges}" style="font-size:11px;padding:3px 12px">Record</button>
+          ${pred ? `<span style="font-size:10px;color:var(--muted)">expected ≈ <b style="color:${pred.d >= 0 ? 'var(--green)' : 'var(--red)'}">${pred.d >= 0 ? '+' : ''}${pred.d}</b> (from your ${pred.n} logged run${pred.n > 1 ? 's' : ''} at ${badges}🏅)</span>` : ''}
+        </div>` : '';
       return `<div class="reroll-note" style="border-color:${RANK_TIERS[MASTER_TI].c};margin-top:${opts.final ? 4 : 10}px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:12px">
         <b style="color:${RANK_TIERS[MASTER_TI].c}">👑 Master</b>
         <span>${opts.final ? 'final' : 'if you stop now'} at <b>${badges}</b>🏅</span>
-        <span style="color:var(--muted)">${rate}${place} — at Master a run moves your <b>rating</b>, not stars. Update it in <b>Profile → 🎖</b> after the result screen.</span>
+        <span style="color:var(--muted)">${rate}${place}${opts.final ? '' : ' — at Master a run moves your <b>rating</b>, not stars.'}</span>
+        ${capture}
       </div>`;
     }
     let last = null; try { last = JSON.parse(localStorage.getItem('bc_rankLastApplied') || 'null'); } catch (e) {}
@@ -2446,7 +2489,7 @@
   // tier/stars, the MMR calibration learned from real opponents, and the per-rank
   // anchors — restore it on a new machine and the ladder work was simply gone.
   const BC_KEYS = ['bc_live', 'bc_runs', 'bc_simnoise', 'bc_notify', 'bc_ingest', 'bc_sync', 'bc_tour',
-    'bc_rankmanual', 'bc_rankAnchors', 'bc_rankLastApplied', 'bc_mmrEst', 'bc_mmrSamples', 'bc_hpCurve'];
+    'bc_rankmanual', 'bc_rankAnchors', 'bc_rankLastApplied', 'bc_mmrEst', 'bc_mmrSamples', 'bc_hpCurve', 'bc_ratingLog'];
   function exportData() {
     const out = { app: 'batomon-companion', v: 1, exportedAt: new Date().toISOString() };
     BC_KEYS.forEach(k => { const v = localStorage.getItem(k); if (v != null) out[k] = v; });
@@ -3006,6 +3049,17 @@
         const ap = autoApplyRankedResult(finalBadges, sig); if (ap) bcNotify('🎖 Rank updated', (ap.delta >= 0 ? '+' : '') + ap.delta + '★ → ' + rankStr(ap.to));
       }
       saveLive(); renderLive(); try { renderProfile(); } catch (e) {}
+    });
+    // 👑 record a Master result straight from the end-of-run banner (the numbers
+    // are on the player's result screen at that exact moment).
+    document.querySelectorAll('.mr-save').forEach(b => b.onclick = () => {
+      const row = b.parentElement;
+      const rating = +(row.querySelector('.mr-rating') || {}).value || 0;
+      const place = +(row.querySelector('.mr-place') || {}).value || 0;
+      if (!(rating > 0)) { const i = row.querySelector('.mr-rating'); if (i) { i.style.borderColor = 'var(--red)'; i.focus(); } return; }
+      const res = recordRating(+b.dataset.badges || 0, rating, place);
+      if (res) bcNotify('🎖 Master rating recorded', `${rating.toLocaleString()}${res.delta != null ? ` (${res.delta >= 0 ? '+' : ''}${res.delta})` : ''}`);
+      renderLive();
     });
     // 🎖 one-click apply of a ranked run's star delta. Records bc_rankLastApplied
     // (runSig + pre/post) so the banner shows the transition and can never re-apply.
