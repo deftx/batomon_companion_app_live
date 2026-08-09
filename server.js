@@ -13,6 +13,18 @@ const { spawn } = require('child_process');
 const ROOT = __dirname;
 const PORT = process.env.PORT || 8137;
 const HOST = process.env.BC_HOST || '127.0.0.1'; // loopback by default — see the listen() note at the bottom
+
+// This is a local companion the player leaves running next to a game. A stray
+// throw from a filesystem race (the game rewrites and deletes its save under us)
+// used to take the whole process down, and the app just stopped answering — the
+// player sees "localhost refused to connect" with no idea why. Log and keep
+// serving instead; a broken sync tick is recoverable, a dead server is not.
+process.on('uncaughtException', (e) => {
+  console.log('[recovered] ' + (e && e.message ? e.message : e));
+});
+process.on('unhandledRejection', (e) => {
+  console.log('[recovered:promise] ' + (e && e.message ? e.message : e));
+});
 // live game link: the game writes its run state here in PLAIN JSON (since ~0.8.x)
 const RUN_SAVE = path.join(process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'),
   'Godot', 'app_userdata', 'Batomon Showdown', 'run_save.json');
@@ -43,14 +55,26 @@ async function getNews() {
 // ---- live-run push: watch the save dir, stream changes over SSE ----
 // The game rewrites run_save.json on every action; fs.watch catches it in
 // ~50ms and pushes to every connected app tab — no polling latency.
+// EVERY filesystem call here races the game: it rewrites run_save.json on each
+// action and DELETES it when a run ends, while the watcher fires on exactly those
+// events. statSync used to sit outside the try, so a save that vanished between
+// the read and the stat threw out of an async timer callback and killed the whole
+// server — the app would simply stop answering the moment a run finished.
 async function readRunSave() {
-  if (!fs.existsSync(RUN_SAVE)) return { exists: false };
-  let data = null;
-  for (let attempt = 0; attempt < 3 && !data; attempt++) {
-    try { data = JSON.parse(fs.readFileSync(RUN_SAVE, 'utf8')); }
-    catch (e) { await new Promise(r => setTimeout(r, 50)); } // mid-write
+  try {
+    if (!fs.existsSync(RUN_SAVE)) return { exists: false };
+    let data = null;
+    for (let attempt = 0; attempt < 3 && !data; attempt++) {
+      try { data = JSON.parse(fs.readFileSync(RUN_SAVE, 'utf8')); }
+      catch (e) { await new Promise(r => setTimeout(r, 50)); } // mid-write, or just deleted
+    }
+    if (!data) return { exists: false, midWrite: true };
+    let mtimeMs = 0;
+    try { mtimeMs = fs.statSync(RUN_SAVE).mtimeMs; } catch (e) {} // deleted between read and stat
+    return { exists: true, mtimeMs, data };
+  } catch (e) {
+    return { exists: false, error: e.message };
   }
-  return data ? { exists: true, mtimeMs: fs.statSync(RUN_SAVE).mtimeMs, data } : { exists: false, midWrite: true };
 }
 const sseClients = new Set();
 let saveWatcher = null;
