@@ -19,6 +19,14 @@ const sb = { window: {}, console };
 vm.createContext(sb);
 vm.runInContext(fs.readFileSync(path.join(ROOT, 'data.js'), 'utf8'), sb);
 vm.runInContext(fs.readFileSync(path.join(ROOT, 'engine.js'), 'utf8'), sb);
+// Apply the same live-patch overrides the app applies in the browser. Without
+// this the baseline is built on the database's stale numbers while the app
+// scores boards with the patched ones, skewing every "Board vs Master" percentile.
+try {
+  const po = require(path.join(ROOT, 'patch-overrides.js'));
+  const res = po.applyPatchOverrides(sb.window.BATODEX, po.PATCH_OVERRIDES);
+  if (res.applied.length) console.log(`[patch ${res.patch}] baseline built with ${res.applied.length} override(s)`);
+} catch (e) { console.log('patch overrides not applied:', e.message); }
 const E = sb.window.Engine, D = sb.window.BATODEX;
 if (!E || !D) { console.error('failed to load engine/data'); process.exit(1); }
 

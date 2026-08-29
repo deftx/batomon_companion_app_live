@@ -37,7 +37,7 @@ window.Engine = (function () {
     const o = Object.assign({ shiny: false, day: 5, team: [], trainerId: null }, opts || {});
     const ld = levelData(m, level, o.shiny);
     if (!ld) return { total: 0, parts: {}, notes: [] };
-    const cd = Math.max(ld.cooldown || 5, 0.5);
+    const cd = Math.max(ld.cooldown || 5, 0.1); // 0.1s is the game's floor (was clamped at 0.5s)
     const mc = ld.multicast || 1;
     const T = fightLen(o.day);
     const parts = {};
@@ -692,7 +692,7 @@ window.Engine = (function () {
   // Returns { tKill, tDie, duration, margin, winner, timeline: {casts, burnTicks}, perUnit: [{label, direct, status}] }
   function simEvents(specsA, specsB, hpA, hpB, opts) {
     const o = opts || {};
-    const TMAX = o.tmax || 90, DT = 0.05;
+    const TMAX = o.tmax || 90, DT = 0.05, MIN_CD = 0.1; // 0.1s is the game's hard cooldown floor
     const mkSide = (specs, hp) => ({
       units: specs.map((s, i) => ({
         ...s, i, cds: 0, next: s.cd, // first cast at t = cd
@@ -752,9 +752,9 @@ window.Engine = (function () {
         const tgt = me.units[d.targetIdx];
         if (tgt) {
           if (d.kind === 'cds') { // permanent cooldown-speed, lands stepwise — remaining wait shrinks proportionally
-            const oldInt = tgt.cd / (1 + tgt.cds / 100);
+            const oldInt = Math.max(tgt.cd / (1 + tgt.cds / 100), MIN_CD);
             tgt.cds += (d.rate || 0.04) * 100;
-            const newInt = tgt.cd / (1 + tgt.cds / 100);
+            const newInt = Math.max(tgt.cd / (1 + tgt.cds / 100), MIN_CD);
             tgt.next = t + Math.max((tgt.next - t) * (newInt / oldInt), 0.05);
           } else if (d.kind === 'charge') tgt.next = Math.max(tgt.next - (d.amt || 1), t + 0.05);
           else if (d.kind === 'feed') {
@@ -773,7 +773,11 @@ window.Engine = (function () {
           while (u.next <= t + 1e-9 && me.dead < 0 && foe.dead < 0) {
             doCast(me, foe, u, u.next, 0);
             if (u.cdGrow) u.cd += u.cdGrow; // Draconarch: self-slowing cooldown, per cast
-            u.next = u.once ? Infinity : u.next + u.cd / (1 + u.cds / 100); // self-KO: one cast then gone
+            // Wiki: "The minimum cooldown is 0.1s. Reducing the value below this is
+            // possible, but has no effect." Nothing enforced that here, so a
+            // CDS-stacked carry could cast faster than the game ever allows and the
+            // sim overrated exactly the Boomagon-chain line the app recommends.
+            u.next = u.once ? Infinity : u.next + Math.max(u.cd / (1 + u.cds / 100), MIN_CD); // self-KO: one cast then gone
             if (foe.hp <= 0 && foe.dead < 0) foe.dead = t;
           }
         }

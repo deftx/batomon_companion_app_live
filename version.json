@@ -1,7 +1,7 @@
 {
-  "version": "2.3.1",
+  "version": "2.3.2",
   "minSupported": "2.0.0",
   "releaseUrl": "https://github.com/deftx/batomon_companion_app_live/releases/latest",
   "downloadUrl": "https://github.com/deftx/batomon_companion_app_live/releases/latest/download/batomon-companion.zip",
-  "notes": "Corrects how shields interact with poison, burn and shock. The sim had the rule inverted and was over-punishing shields, so poison was heavily overrated against shield boards. Per the batodex wiki, status damage is REDUCED against shields (15% since 0.8.5) - a shield now soaks more than its face value against status. The counter-read also stops lumping heal walls and shield walls together: a ramp beats healing, direct damage beats shields."
+  "notes": "Audited every core mechanic against the wiki after the shield fix and found a second one: nothing enforced the game 0.1s cooldown floor, so CDS-stacked carries cast faster in the sim than the game allows - the Boomagon chain was overrated. The Board-vs-Master baseline is rebuilt with the corrected engine and the 0.8.5 balance (it was being compared against numbers from a different engine), and the patch overrides now apply in the Node tools as well as the browser, from one shared implementation."
 }

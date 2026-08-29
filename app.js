@@ -4,40 +4,15 @@
   // 🩹 Apply live-patch balance the scraped database hasn't published yet. Each
   // override is compared first, so once batodex catches up it silently no-ops.
   // Returns what it actually had to change, which the Patches tab reports.
-  const PATCHED = (() => {
-    const P = window.PATCH_OVERRIDES;
-    const applied = [];
-    if (!P || !D || !Array.isArray(D.monsters)) return { patch: null, applied };
-    const byId = {}; D.monsters.forEach(m => { byId[m.id] = m; });
-    for (const [id, o] of Object.entries(P.monsters || {})) {
-      const m = byId[id]; if (!m) continue;
-      if (o.cooldown != null) {
-        (m.levels || []).forEach(l => { if (l && l.cooldown !== o.cooldown) { l.cooldown = o.cooldown; } });
-        (m.shinyLevels || []).forEach(l => { if (l && l.cooldown !== o.cooldown) { l.cooldown = o.cooldown; } });
-        applied.push(`${m.name}: cooldown → ${o.cooldown}s`);
-      }
-      if (o.cost != null && m.cost !== o.cost) { applied.push(`${m.name}: cost → $${o.cost}`); m.cost = o.cost; }
-      if (o.abilityTrigger && m.ability && m.ability.trigger !== o.abilityTrigger) m.ability.trigger = o.abilityTrigger;
-      if (o.abilityByLevel && m.ability) {
-        m.ability.byLevel = Object.assign({}, m.ability.byLevel, o.abilityByLevel);
-        if (o.abilityByLevel[1] && m.ability.description !== o.abilityByLevel[1]) {
-          m.ability.description = o.abilityByLevel[1];
-          applied.push(`${m.name}: ability reworked`);
-        }
-      }
-    }
-    for (const [name, o] of Object.entries(P.trinkets || {})) {
-      const t = (D.trinkets || []).find(x => x && x.name === name); if (!t) continue;
-      if (o.description && t.description !== o.description) { t.description = o.description; applied.push(`${name}: reworked`); }
-    }
-    if (applied.length) console.log(`[patch ${P.patch}] applied ${applied.length} change(s) the database hasn't published yet`);
-    return { patch: P.patch, supersedes: P.supersedes, applied };
-  })();
+  const PATCHED = (typeof window.applyPatchOverrides === 'function')
+    ? window.applyPatchOverrides(D)
+    : { patch: null, supersedes: null, applied: [] };
+  if (PATCHED.applied.length) console.log(`[patch ${PATCHED.patch}] applied ${PATCHED.applied.length} change(s) the database hasn't published yet`);
   // 📦 RELEASE IDENTITY — this build's version, and where updates come from.
   // APP_VERSION is bumped at release time and compared against the PUBLIC repo's
   // version.json: older-but-supported → soft update banner; below `minSupported` →
   // hard block (the old build stops working and points at the download).
-  const APP_VERSION = '2.3.1';
+  const APP_VERSION = '2.3.2';
   const UPDATE_MANIFEST = 'https://raw.githubusercontent.com/deftx/batomon_companion_app_live/main/version.json';
   const DOWNLOAD_PAGE = 'https://github.com/deftx/batomon_companion_app_live';
   // ☕ support link. Empty = the button falls back to opening the Who am I tab.

@@ -131,7 +131,7 @@ const load = (rel) => {
   vm.runInContext(fs.readFileSync(p, 'utf8'), sandbox, { filename: rel });
   return true;
 };
-for (const f of ['data.js', 'guide.js', 'guide.fr.js', 'lang.js', 'engine.js', 'exemplars.js', 'community.js']) load(f);
+for (const f of ['data.js', 'guide.js', 'guide.fr.js', 'lang.js', 'engine.js', 'exemplars.js', 'community.js', 'patch-overrides.js']) load(f); // patch-overrides before app.js, as in index.html
 sandbox.module = { exports: {} }; // only app.js's hook should populate this
 load('app.js');
 const core = sandbox.module.exports;
