@@ -37,7 +37,7 @@
   // APP_VERSION is bumped at release time and compared against the PUBLIC repo's
   // version.json: older-but-supported → soft update banner; below `minSupported` →
   // hard block (the old build stops working and points at the download).
-  const APP_VERSION = '2.3.0';
+  const APP_VERSION = '2.3.1';
   const UPDATE_MANIFEST = 'https://raw.githubusercontent.com/deftx/batomon_companion_app_live/main/version.json';
   const DOWNLOAD_PAGE = 'https://github.com/deftx/batomon_companion_app_live';
   // ☕ support link. Empty = the button falls back to opening the Who am I tab.
@@ -3950,11 +3950,12 @@
   function simBattle(mine, enemy, day, myHP, enemyHP) {
     const baseT = 12 + 3 * day; // expected-fight-length reference for cast counts
     // real team HP pools (the in-game HP bar), sustain reduces incoming damage;
-    // status damage is 15% weaker into shields (0.8.5; was 25%) — approximated inside sustain
+    // status is reduced 15% against shields (0.8.5; was 25%) — so a shield point
+    // soaks ~1.18 status damage, i.e. AT LEAST its face value. Approximated in sustain.
     const killTime = (att, def, defHP) => {
       let dmg = 0;
       for (let t = 0.25; t <= 95; t += 0.25) {
-        dmg += Math.max(offenseAt(att, t) - (def.heal + def.shield * 0.94), 0.5) * 0.25;
+        dmg += Math.max(offenseAt(att, t) - (def.heal + def.shield), 0.5) * 0.25;
         if (dmg >= defHP) return t;
       }
       return 95;
@@ -4179,15 +4180,21 @@
   // Ratios are vs the day-average, so "wall"/"glass"/"dot" mean *relatively* skewed.
   // When not synced it also returns the archetype SPREAD (P(wall)/P(glass)/…) so the
   // brain can name the flex play for the tail draws. Returns null pre-corpus.
+  // Heal and shield are BOTH "sustain", but opposite things beat them, so lumping
+  // them together produced dangerous advice. Healing does nothing against poison —
+  // the ramp simply out-paces it. Shields specifically REDUCE status damage (15%
+  // since 0.8.5) and soak more than face value, so poison is the WRONG answer there
+  // and direct damage is the right one. Split the wall in two.
   function classifyShape(e, prof) {
     const rel = (k) => (e[k] || 0) / Math.max(prof[k] || 0.01, 0.01);
-    const sustain = (rel('heal') + rel('shield')) / 2, dot = (rel('burnApp') + rel('poisonApp')) / 2, burst = rel('dps');
+    const healR = rel('heal'), shieldR = rel('shield');
+    const sustain = (healR + shieldR) / 2, dot = (rel('burnApp') + rel('poisonApp')) / 2, burst = rel('dps');
     let kind;
-    if (sustain >= 1.4 && sustain >= dot && sustain >= burst) kind = 'wall';
+    if (sustain >= 1.4 && sustain >= dot && sustain >= burst) kind = shieldR > healR * 1.3 ? 'shieldwall' : 'wall';
     else if (dot >= 1.4 && dot >= burst) kind = 'dot';
     else if (burst >= 1.5 && burst > sustain) kind = 'glass';
     else kind = 'balanced';
-    return { kind, sustain, dot, burst };
+    return { kind, sustain, dot, burst, healR, shieldR };
   }
   function enemyShape() {
     const SY = window.SYNERGY;
@@ -4205,7 +4212,7 @@
     if (archs && archs.length) {
       const sorted = archs.slice().sort((a, b) => b.weight - a.weight);
       const dom = classifyShape(sorted[0], prof);
-      const spread = { wall: 0, dot: 0, glass: 0, balanced: 0 };
+      const spread = { wall: 0, shieldwall: 0, dot: 0, glass: 0, balanced: 0 };
       for (const a of archs) spread[classifyShape(a, prof).kind] += a.weight;
       return { synced: false, kind: dom.kind, sustain: dom.sustain, dot: dom.dot, burst: dom.burst, spread, label: `the most-likely day-${day} enemy (${Math.round(sorted[0].weight * 100)}% of boards)` };
     }
@@ -4532,12 +4539,14 @@
       }
       if (modelsDiverge) html +=`<div class="note" style="margin:4px 0 0;border-color:rgba(240,196,64,.5)">⚖️ <b>Models disagree</b>: event timeline says ${sim.margin >= 0 ? '+' : ''}${sim.margin}% but the integral model says ${closedSim.margin >= 0 ? '+' : ''}${closedSim.margin}% — trusting the event sim (discrete casts, real burn decay); treat the verdict with extra care this round.</div>`;
       // EHP = raw HP + everything your sustain absorbs while THEY kill you:
-      // heal/s + shield/s (status into shields is 15% weaker as of 0.8.5 → ×0.94 avg).
+      // heal/s + shield/s. A shield point absorbs 1.0 direct and ~1.18 status
+      // (status is reduced 15% against shields since 0.8.5), so face value is the
+      // conservative floor — the old 0.9 understated shields outright.
       // Sustain window is clamped to a realistic fight horizon so a near-unkillable
       // healer reads a big-but-sane EHP (~10^5) instead of the old runaway ~10^8.
       const ehpWin = (t) => Math.min(t, TMAXEV);
-      const myEHP = Math.round(myHP + (mine.heal + mine.shield * 0.94) * ehpWin(sim.tDie));
-      const enemyEHP = Math.round(enemyHP + (enemy.heal + enemy.shield * 0.94) * ehpWin(sim.tKill));
+      const myEHP = Math.round(myHP + (mine.heal + mine.shield) * ehpWin(sim.tDie));
+      const enemyEHP = Math.round(enemyHP + (enemy.heal + enemy.shield) * ehpWin(sim.tKill));
       // Σ damage a side OUTPUTS over a window — closed-form of offenseAt():
       // direct·T + shock hitRate·app·T²/2 + burn ∫(2·(max(B−2,0)t + min(B,2)/2)) + poison·T²/2
       const totalDmg = (P, T) => Math.round(
@@ -4568,9 +4577,10 @@
         // the concrete counter (no other tool can see your next foe). Only when synced.
         // Shares classifyShape() with the strategy brain so the two never disagree.
         const { kind } = classifyShape(enemy, prof);
-        const cls = { wall: 'sustain wall', dot: 'burn/poison rush', glass: 'glass cannon', balanced: 'balanced' }[kind];
+        const cls = { wall: 'heal wall', shieldwall: 'shield wall', dot: 'burn/poison rush', glass: 'glass cannon', balanced: 'balanced' }[kind];
         const tip = {
-          wall: 'chip damage stalls out — win with <b>burst or poison</b> (poison ramps forever, out-races heal past ~15s). Don\'t add more small hits.',
+          wall: 'healing cannot out-pace a ramp — win with <b>poison</b> (it never decays and out-races heal past ~15s) or hard burst.',
+          shieldwall: 'shields <b>reduce status by 15%</b> and soak more than face value — poison is the WRONG answer here. Win with <b>direct damage</b>: raw DPS, multicast, and shock (it cashes on direct hits).',
           dot: 'their DoT ramps — <b>race it</b>: burst them down early, or add heal/shield to survive the ramp then out-last.',
           glass: 'they hit <b>hard, fast</b> — stack shields/sustain to survive the opening, then out-last them. Outlast, don\'t trade.',
           balanced: 'even shape — small edges decide it: one merge, a positioning donor, or a scaling trinket.',
@@ -4704,7 +4714,7 @@
       </details>`;
       // timing insight: when does your poison overtake their sustain?
       if (mine.poisonApp > 0.2) {
-        const tCross = (enemy.heal + enemy.shield * 0.94) / Math.max(mine.poisonApp, 0.01);
+        const tCross = (enemy.heal + enemy.shield) / Math.max(mine.poisonApp, 0.01);
         html += `<div class="note" style="margin:6px 0 0">☠️ Your poison alone out-damages their sustain from <b>~${Math.round(tCross)}s</b> — ${tCross < sim.duration ? 'the ramp pays off in this fight length ✓' : `but the fight ends ~${Math.round(sim.duration)}s: too short, add tempo or triggers`}.</div>`;
       }
       // greed logic: hearts + margin
@@ -6174,7 +6184,10 @@
   }
   // which adopted play id best answers a given enemy shape (first owned match wins)
   function favoredPlayVs(kind, ids) {
-    const pref = kind === 'wall' ? ['poison_ramp', 'burn_chef', 'shock_hits', 'boom_chain']
+    // A HEAL wall is beaten by a ramp; a SHIELD wall reduces status, so it wants
+    // direct damage and shock (which cashes on direct hits) instead.
+    const pref = kind === 'shieldwall' ? ['shock_hits', 'boom_chain', 'bug_feeder']
+      : kind === 'wall' ? ['poison_ramp', 'burn_chef', 'shock_hits', 'boom_chain']
       : kind === 'glass' ? ['shock_hits', 'boom_chain', 'burn_chef']
         : kind === 'dot' ? ['item_engine', 'boom_chain', 'bug_feeder']
           : [];
@@ -6199,7 +6212,7 @@
     const shape = enemyShape();
     const ids = acts.map(a => a.id);
     const prim = acts[0].id;
-    const kindLabel = { wall: 'sustain wall', dot: 'DoT rush', glass: 'glass cannon', balanced: 'balanced' };
+    const kindLabel = { wall: 'heal wall', shieldwall: 'shield wall', dot: 'DoT rush', glass: 'glass cannon', balanced: 'balanced' };
 
     // enemy-context line — which adopted play the fight you're walking into rewards
     let enemyLine = '';
@@ -6210,7 +6223,9 @@
       } else if (shape.spread) {
         const parts = [];
         const wallP = Math.round((shape.spread.wall || 0) * 100), glassP = Math.round((shape.spread.glass || 0) * 100);
-        if (wallP >= 15) { const f = favoredPlayVs('wall', ids); if (f) parts.push(`${wallP}% are <b>sustain walls</b> → keep <b>${esc(nm(f))}</b> as the flex (out-races heal)`); }
+        const shieldP = Math.round((shape.spread.shieldwall || 0) * 100);
+        if (wallP >= 15) { const f = favoredPlayVs('wall', ids); if (f) parts.push(`${wallP}% are <b>heal walls</b> → keep <b>${esc(nm(f))}</b> as the flex (a ramp out-races heal)`); }
+        if (shieldP >= 15) { const f = favoredPlayVs('shieldwall', ids); if (f) parts.push(`${shieldP}% are <b>shield walls</b> → <b>${esc(nm(f))}</b> is the answer (shields blunt status)`); }
         if (glassP >= 15) { const f = favoredPlayVs('glass', ids); if (f) parts.push(`${glassP}% are <b>glass cannons</b> → <b>${esc(nm(f))}</b> punishes them`); }
         enemyLine = parts.length ? `🎲 Today's field: ${parts.join('; ')}.` : '';
       }

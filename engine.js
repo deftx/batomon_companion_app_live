@@ -705,17 +705,27 @@ window.Engine = (function () {
       dead: -1,
     });
     const A = mkSide(specsA, hpA), B = mkSide(specsB, hpB);
-    // Damage into a side: shields absorb first. Status damage is REDUCED into
-    // shields rather than fully absorbed — patch 0.8.5 cut that reduction from
-    // 25% to 15%, i.e. status now bites harder through shields (eff 0.75 -> 0.85).
+    // Damage into a side: shields absorb before HP. Per the batodex wiki, status
+    // damage (Burn/Poison/Shock) is REDUCED against shields — patch 0.8.5 softened
+    // that reduction from 25% to 15%, so status now bites harder than it did.
+    //
+    // The old formula had this inverted AND over-punished shields: a 100 shield hit
+    // by 100 status lost its whole pool *and* still leaked damage to HP. Correct
+    // behaviour is the opposite — the incoming status is weakened, so a 100 shield
+    // eats a 100 status hit with pool to spare and HP untouched. Poison was being
+    // massively overrated against shield boards.
+    const STATUS_SHIELD_REDUCTION = 0.15; // 0.8.5 (was 0.25)
     const dealTo = (side, amt, isStatus, attacker) => {
       if (side.dead >= 0 || amt <= 0) return;
       let rem = amt;
       if (side.shieldPool > 0) {
-        const eff = isStatus ? 0.85 : 1;
-        const absorbed = Math.min(side.shieldPool * eff, rem);
-        side.shieldPool -= absorbed / eff;
-        rem -= absorbed;
+        // vs shields a status point only spends (1 - reduction) of the pool,
+        // so the pool can eat more raw status damage than its face value.
+        const perPoint = isStatus ? (1 - STATUS_SHIELD_REDUCTION) : 1;
+        const canEat = side.shieldPool / perPoint;
+        const eaten = Math.min(canEat, rem);
+        side.shieldPool -= eaten * perPoint;
+        rem -= eaten;
       }
       side.hp -= rem;
       if (attacker) { if (isStatus) attacker.status += amt; else attacker.direct += amt; }

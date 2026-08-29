@@ -1,7 +1,7 @@
 {
-  "version": "2.3.0",
+  "version": "2.3.1",
   "minSupported": "2.0.0",
   "releaseUrl": "https://github.com/deftx/batomon_companion_app_live/releases/latest",
   "downloadUrl": "https://github.com/deftx/batomon_companion_app_live/releases/latest/download/batomon-companion.zip",
-  "notes": "Updated for game patch 0.8.5. Status damage into shields is now 15% weaker instead of 25%, so poison/burn/shock hit harder through shields and every win% reflects it. The 0.8.5 balance changes (cooldowns, Craghorn cost, the Berroon and Membership Card reworks) are applied on top of the scraped database, which is still serving 0.8.4. Also fixes a crash that killed the app whenever a run ended."
+  "notes": "Corrects how shields interact with poison, burn and shock. The sim had the rule inverted and was over-punishing shields, so poison was heavily overrated against shield boards. Per the batodex wiki, status damage is REDUCED against shields (15% since 0.8.5) - a shield now soaks more than its face value against status. The counter-read also stops lumping heal walls and shield walls together: a ramp beats healing, direct damage beats shields."
 }
