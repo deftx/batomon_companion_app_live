@@ -1,11 +1,43 @@
 /* Batomon Companion — UI */
 (function () {
   const D = window.BATODEX, G = window.GUIDE, E = window.Engine;
+  // 🩹 Apply live-patch balance the scraped database hasn't published yet. Each
+  // override is compared first, so once batodex catches up it silently no-ops.
+  // Returns what it actually had to change, which the Patches tab reports.
+  const PATCHED = (() => {
+    const P = window.PATCH_OVERRIDES;
+    const applied = [];
+    if (!P || !D || !Array.isArray(D.monsters)) return { patch: null, applied };
+    const byId = {}; D.monsters.forEach(m => { byId[m.id] = m; });
+    for (const [id, o] of Object.entries(P.monsters || {})) {
+      const m = byId[id]; if (!m) continue;
+      if (o.cooldown != null) {
+        (m.levels || []).forEach(l => { if (l && l.cooldown !== o.cooldown) { l.cooldown = o.cooldown; } });
+        (m.shinyLevels || []).forEach(l => { if (l && l.cooldown !== o.cooldown) { l.cooldown = o.cooldown; } });
+        applied.push(`${m.name}: cooldown → ${o.cooldown}s`);
+      }
+      if (o.cost != null && m.cost !== o.cost) { applied.push(`${m.name}: cost → $${o.cost}`); m.cost = o.cost; }
+      if (o.abilityTrigger && m.ability && m.ability.trigger !== o.abilityTrigger) m.ability.trigger = o.abilityTrigger;
+      if (o.abilityByLevel && m.ability) {
+        m.ability.byLevel = Object.assign({}, m.ability.byLevel, o.abilityByLevel);
+        if (o.abilityByLevel[1] && m.ability.description !== o.abilityByLevel[1]) {
+          m.ability.description = o.abilityByLevel[1];
+          applied.push(`${m.name}: ability reworked`);
+        }
+      }
+    }
+    for (const [name, o] of Object.entries(P.trinkets || {})) {
+      const t = (D.trinkets || []).find(x => x && x.name === name); if (!t) continue;
+      if (o.description && t.description !== o.description) { t.description = o.description; applied.push(`${name}: reworked`); }
+    }
+    if (applied.length) console.log(`[patch ${P.patch}] applied ${applied.length} change(s) the database hasn't published yet`);
+    return { patch: P.patch, supersedes: P.supersedes, applied };
+  })();
   // 📦 RELEASE IDENTITY — this build's version, and where updates come from.
   // APP_VERSION is bumped at release time and compared against the PUBLIC repo's
   // version.json: older-but-supported → soft update banner; below `minSupported` →
   // hard block (the old build stops working and points at the download).
-  const APP_VERSION = '2.2.0';
+  const APP_VERSION = '2.3.0';
   const UPDATE_MANIFEST = 'https://raw.githubusercontent.com/deftx/batomon_companion_app_live/main/version.json';
   const DOWNLOAD_PAGE = 'https://github.com/deftx/batomon_companion_app_live';
   // ☕ support link. Empty = the button falls back to opening the Who am I tab.
@@ -3918,11 +3950,11 @@
   function simBattle(mine, enemy, day, myHP, enemyHP) {
     const baseT = 12 + 3 * day; // expected-fight-length reference for cast counts
     // real team HP pools (the in-game HP bar), sustain reduces incoming damage;
-    // status damage is 25% weaker into shields (wiki) — approximated inside sustain
+    // status damage is 15% weaker into shields (0.8.5; was 25%) — approximated inside sustain
     const killTime = (att, def, defHP) => {
       let dmg = 0;
       for (let t = 0.25; t <= 95; t += 0.25) {
-        dmg += Math.max(offenseAt(att, t) - (def.heal + def.shield * 0.9), 0.5) * 0.25;
+        dmg += Math.max(offenseAt(att, t) - (def.heal + def.shield * 0.94), 0.5) * 0.25;
         if (dmg >= defHP) return t;
       }
       return 95;
@@ -4500,12 +4532,12 @@
       }
       if (modelsDiverge) html +=`<div class="note" style="margin:4px 0 0;border-color:rgba(240,196,64,.5)">⚖️ <b>Models disagree</b>: event timeline says ${sim.margin >= 0 ? '+' : ''}${sim.margin}% but the integral model says ${closedSim.margin >= 0 ? '+' : ''}${closedSim.margin}% — trusting the event sim (discrete casts, real burn decay); treat the verdict with extra care this round.</div>`;
       // EHP = raw HP + everything your sustain absorbs while THEY kill you:
-      // heal/s + shield/s (status damage into shields is 25% weaker → ×0.9 avg).
+      // heal/s + shield/s (status into shields is 15% weaker as of 0.8.5 → ×0.94 avg).
       // Sustain window is clamped to a realistic fight horizon so a near-unkillable
       // healer reads a big-but-sane EHP (~10^5) instead of the old runaway ~10^8.
       const ehpWin = (t) => Math.min(t, TMAXEV);
-      const myEHP = Math.round(myHP + (mine.heal + mine.shield * 0.9) * ehpWin(sim.tDie));
-      const enemyEHP = Math.round(enemyHP + (enemy.heal + enemy.shield * 0.9) * ehpWin(sim.tKill));
+      const myEHP = Math.round(myHP + (mine.heal + mine.shield * 0.94) * ehpWin(sim.tDie));
+      const enemyEHP = Math.round(enemyHP + (enemy.heal + enemy.shield * 0.94) * ehpWin(sim.tKill));
       // Σ damage a side OUTPUTS over a window — closed-form of offenseAt():
       // direct·T + shock hitRate·app·T²/2 + burn ∫(2·(max(B−2,0)t + min(B,2)/2)) + poison·T²/2
       const totalDmg = (P, T) => Math.round(
@@ -4672,7 +4704,7 @@
       </details>`;
       // timing insight: when does your poison overtake their sustain?
       if (mine.poisonApp > 0.2) {
-        const tCross = (enemy.heal + enemy.shield * 0.9) / Math.max(mine.poisonApp, 0.01);
+        const tCross = (enemy.heal + enemy.shield * 0.94) / Math.max(mine.poisonApp, 0.01);
         html += `<div class="note" style="margin:6px 0 0">☠️ Your poison alone out-damages their sustain from <b>~${Math.round(tCross)}s</b> — ${tCross < sim.duration ? 'the ramp pays off in this fight length ✓' : `but the fight ends ~${Math.round(sim.duration)}s: too short, add tempo or triggers`}.</div>`;
       }
       // greed logic: hearts + margin
@@ -5903,7 +5935,7 @@
           score: 55 + (berroon ? 20 : 0) + (c.itemUses ? c.itemUses.max * 5 : 0),
           focusId: alp,
           stratIds: ['berroon'], stratTypes: [],
-          detail: `<b>${esc(aName)}</b> grows +Dmg &amp; Shield on EVERY item use${berroon ? ` and <b>Berroon</b> raises your daily item limit${c.itemUses ? ` (${c.itemUses.max}/day now)` : ''}` : ' — add Berroon to raise the daily item limit'}. Buy every cheap/free item, every day — even mediocre ones are ${esc(aName)} food. Level Berroon for more uses.`,
+          detail: `<b>${esc(aName)}</b> grows +Dmg &amp; Shield on EVERY item use. Buy every cheap/free item, every day — even mediocre ones are ${esc(aName)} food.${berroon ? ` <b>Berroon</b> now seeds your shop with <b>berries</b> (0.8.5 rework) — guaranteed cheap food, so it feeds this engine even though it no longer raises the limit.` : ''} The daily item LIMIT is raised by <b>Membership Card</b> since 0.8.5${c.itemUses ? ` (${c.itemUses.max}/day now)` : ''} — that trinket is the real ceiling on this engine.`,
           worth: true,
           whyWorth: 'compounds every single day at almost no cost',
         };
@@ -8826,6 +8858,13 @@ ${rs.slots ? `<div style="display:flex;align-items:center;gap:12px;margin-top:8p
         <button class="ghost" id="news-reload">↻ Reload feed</button>
         <button class="ghost" id="data-refresh" title="Re-scrape batodex dataset + synergies">⟳ Refresh ALL data (batodex + synergies)</button>
       </div>
+      ${PATCHED.applied.length ? `<div class="card" style="margin-bottom:14px;border-color:rgba(240,196,64,.45)">
+        <h3>🩹 Patch ${esc(PATCHED.patch)} applied on top of the database
+          <span style="font-size:10px;color:var(--muted);font-weight:400">· batodex still serves ${esc(PATCHED.supersedes || 'the previous patch')}</span></h3>
+        <div class="note" style="margin:6px 0 8px">The scraped database lags a live patch by a few days. These changes come straight from the patch notes and are applied over it, so the sim uses the <b>current</b> numbers. Each one disappears by itself once batodex publishes it.</div>
+        <ul style="margin:0 0 0 18px;font-size:12px;line-height:1.7">${PATCHED.applied.map(a => `<li>${esc(a)}</li>`).join('')}</ul>
+        <div class="note" style="margin:8px 0 0;font-size:10px">Also in ${esc(PATCHED.patch)}, handled in the engine: status damage into shields is now <b>15%</b> weaker (was 25%) — poison/burn/shock hit harder through shields. Pyronade/Electranade/Stingarde finishing their multicast before knocking themselves out was already how the sim modelled them.</div>
+      </div>` : ''}
       <pre id="refresh-log" style="display:none;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:11px;max-height:220px;overflow:auto"></pre>
       <div id="patch-diff-box"></div>
       <div id="news-list"><div class="note">Loading…</div></div>`;

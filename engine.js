@@ -705,12 +705,14 @@ window.Engine = (function () {
       dead: -1,
     });
     const A = mkSide(specsA, hpA), B = mkSide(specsB, hpB);
-    // damage into a side: shields absorb first (status pierces at 75% shield efficiency)
+    // Damage into a side: shields absorb first. Status damage is REDUCED into
+    // shields rather than fully absorbed — patch 0.8.5 cut that reduction from
+    // 25% to 15%, i.e. status now bites harder through shields (eff 0.75 -> 0.85).
     const dealTo = (side, amt, isStatus, attacker) => {
       if (side.dead >= 0 || amt <= 0) return;
       let rem = amt;
       if (side.shieldPool > 0) {
-        const eff = isStatus ? 0.75 : 1;
+        const eff = isStatus ? 0.85 : 1;
         const absorbed = Math.min(side.shieldPool * eff, rem);
         side.shieldPool -= absorbed / eff;
         rem -= absorbed;
